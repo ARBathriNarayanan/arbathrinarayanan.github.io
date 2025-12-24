@@ -1,6 +1,6 @@
 ---
-layout: About
-title: About
+layout: about
+title: about
 permalink: /
 subtitle: UM-DAE Centre for Excellence in Basic Sciences
 
