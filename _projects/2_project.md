@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Exploring Superconducting Quantum Circuits
-description: Done in IISc Bengaluru
-img: assets/img/projects/sqd.jpg
-importance: 1
+title: The Current Mirror Qubit
+description: Done in CEBS Mumbai
+img: assets/img/projects/cmq.png
+importance: 2
 category: work
 related_publications: false
 ---

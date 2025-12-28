@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Exploring Superconducting Quantum Circuits
-description: Done in IISc Bengaluru
-img: assets/img/projects/sqd.jpg
-importance: 1
+title: Superconducting Qubits and Analogue Gravity
+description: Done in CEBS Mumbai
+img: assets/img/projects/sqag.png
+importance: 3
 category: work
 related_publications: false
 ---

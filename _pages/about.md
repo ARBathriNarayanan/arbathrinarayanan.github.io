@@ -25,8 +25,12 @@ latest_posts:
   enabled: false
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
+
 ---
 
-I am a Quantum Information, computing and particle physics enthusiast and have undergone training and projects in India’s premier institutes (`UM DAE CEBS, TIFR, IISc, HRI and IMSc`) and also with IBM and NPTEL. I am now currently in my fifth year Integrated Masters student in Physics at [University of Mumbai-Department of Atomic Energy Centre for Excellence in Basic Sciences](https://https://www.cbs.ac.in/)
+I am a Quantum Information, computing and particle physics enthusiast and have undergone training and projects in India’s premier institutes (`UM DAE CEBS, TIFR, IISc, HRI and IMSc`) and also with IBM and NPTEL. I am now currently in my fifth year Integrated Masters student in Physics at [University of Mumbai-Department of Atomic Energy Centre for Excellence in Basic Sciences](https://www.cbs.ac.in/).
 
-I am also an avid trekker and like to read books, and help managing clubs and societies. More on that [here](https://arbathrinarayanan.github.io/cv/)
+I am also an avid trekker and like to read books, and help managing clubs and societies. More on that [here](https://arbathrinarayanan.github.io/cv/).
+
+For information about my projects and internships, click [here](https://arbathrinarayanan.github.io/projects/).
+

@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Exploring Superconducting Quantum Circuits
-description: Done in IISc Bengaluru
-img: assets/img/projects/sqd.jpg
-importance: 1
+title: Aspects of Quantum Carnot Engine
+description: Done in HRI Prayagraj under Indian Academy of Sciences-Summer Research Fellowship Program
+img: assets/img/projects/carnot.png
+importance: 4
 category: work
 related_publications: false
 ---
@@ -56,4 +56,3 @@ Blackbox quantization
 <div class="caption">
     Methodology of blackbox quantization
 </div>
-
