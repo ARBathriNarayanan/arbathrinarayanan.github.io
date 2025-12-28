@@ -396,6 +396,26 @@ ninja.data = [{
           description: "Done in IISc Bengaluru",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
+            },},{id: "projects-the-current-mirror-qubit",
+          title: 'The Current Mirror Qubit',
+          description: "Done in CEBS Mumbai",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/2_project/";
+            },},{id: "projects-superconducting-qubits-and-analogue-gravity",
+          title: 'Superconducting Qubits and Analogue Gravity',
+          description: "Done in CEBS Mumbai",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/3_project/";
+            },},{id: "projects-aspects-of-quantum-carnot-engine",
+          title: 'Aspects of Quantum Carnot Engine',
+          description: "Done in HRI Prayagraj under Indian Academy of Sciences-Summer Research Fellowship Program",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/4_project/";
+            },},{id: "projects-solar-structure-without-computers",
+          title: 'Solar structure without computers',
+          description: "Done with Khushi Raghavendra (IISER TVM) and Spoorthi Syamaprasad (IISER Kolkata)",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/5_project/";
             },},{
         id: 'social-cv',
         title: 'CV',
