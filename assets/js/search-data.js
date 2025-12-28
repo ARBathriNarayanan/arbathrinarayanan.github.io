@@ -386,11 +386,16 @@ ninja.data = [{
             window.location.href = "/blog/2015/formatting-and-links/";
           
         },
-      },{id: "books-the-godfather",
-          title: 'The Godfather',
+      },{id: "books-the-india-way",
+          title: 'The India Way',
           description: "",
           section: "Books",handler: () => {
-              window.location.href = "/books/the_godfather/";
+              window.location.href = "/books/india_way/";
+            },},{id: "books-mrs-funnybones",
+          title: 'Mrs Funnybones',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/mrs_funnybones/";
             },},{id: "projects-exploring-superconducting-quantum-circuits",
           title: 'Exploring Superconducting Quantum Circuits',
           description: "Done in IISc Bengaluru",
