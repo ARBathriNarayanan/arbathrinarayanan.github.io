@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /repositories/
-title: Repositories
+title: repositories
 description: My Github UserID and repositories. All my programs used for various purposes can be accessed here
 nav: true
 nav_order: 4
@@ -18,6 +18,22 @@ nav_order: 4
 </div>
 
 ---
+
+{% if site.repo_trophies.enabled %}
+{% for user in site.data.repositories.github_users %}
+{% if site.data.repositories.github_users.size > 1 %}
+
+  <h4>{{ user }}</h4>
+  {% endif %}
+  <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  {% include repository/repo_trophies.liquid username=user %}
+  </div>
+
+---
+
+{% endfor %}
+{% endif %}
+{% endif %}
 
 {% if site.data.repositories.github_repos %}
 
