@@ -194,7 +194,7 @@ exclude:
   - vendor
 #uncomment below lines once they are ready
   - _news/announcement_*.md
-  - _pages/repositories.md
+  #- _pages/repositories.md
   - _pages/blog.md
   #- _pages/projects.md
   - _pages/publications.md
