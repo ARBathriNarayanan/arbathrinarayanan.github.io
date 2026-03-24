@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /repositories/
-title: repositories
+title: Repositories
 description: My Github UserID and repositories. All my programs used for various purposes can be accessed here
 nav: true
 nav_order: 4
