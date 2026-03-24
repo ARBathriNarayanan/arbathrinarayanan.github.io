@@ -1,6 +1,6 @@
 ---
 layout: default
-permalink: /blog/
+permalink: /bathriwrites/
 title: BathriWrites
 nav: true
 nav_order: 1
