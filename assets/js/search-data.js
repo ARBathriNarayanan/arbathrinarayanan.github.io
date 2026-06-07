@@ -14,7 +14,7 @@ ninja.data = [{
           description: "",
           section: "Navigation",
           handler: () => {
-            window.location.href = "/bathriwrites/index.html";
+            window.location.href = "/blog/";
           },
         },{id: "nav-projects",
           title: "Projects",
@@ -144,6 +144,13 @@ ninja.data = [{
         section: 'Socials',
         handler: () => {
           window.open("https://instagram.com/bathri2003", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/a-r-bathri-narayanan-679405179", "_blank");
         },
       },{
         id: 'social-quora',
