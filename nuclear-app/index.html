@@ -3,597 +3,495 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quantum Nuclear Level Scheme Determination</title>
+<title>Quantum Nuclear Level Scheme Determination — University of Guelph</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root{
-  --bg:       #080d14;
-  --bg2:      #0d1520;
-  --bg3:      #111c2d;
-  --blue:     #1a56a0;
-  --blue-l:   #3b82d4;
-  --blue-ll:  #93c5fd;
-  --violet:   #6d3fa0;
-  --violet-l: #a78bdc;
-  --orange:   #e07b2a;
-  --orange-l: #f5a855;
-  --text:     #e2eaf7;
-  --muted:    #8ba3c4;
-  --border:   #1e3050;
-  --glow-b:   rgba(26,86,160,0.35);
-  --glow-v:   rgba(109,63,160,0.25);
+:root {
+  --bg:          #fcfbf9; /* Academic ivory/off-white */
+  --bg-muted:    #f5f4f0;
+  --text:        #1c1b1a; /* Dark charcoal */
+  --text-muted:  #615f5c;
+  --border:      #e2e0da;
+  --border-dark: #b8b5ad;
+  --accent-navy: #1a2e40;
+  --accent-gold: #8c6d31;
 }
 
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}
-
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2.5rem;height:58px;
-  background:rgba(8,13,20,0.85);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-}
-.nav-logo{
-  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.95rem;
-  color:var(--blue-ll);letter-spacing:0.5px;
-}
-.nav-logo span{color:var(--orange-l)}
-.nav-links{display:flex;gap:2rem}
-.nav-links a{
-  color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;
-  transition:color 0.2s;letter-spacing:0.3px;
-}
-.nav-links a:hover{color:var(--text)}
-
-/* ── HERO ── */
-.hero{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:6rem 2rem 4rem;text-align:center;
-  position:relative;overflow:hidden;
-}
-.hero-bg{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,86,160,0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(109,63,160,0.10) 0%, transparent 60%);
+html { scroll-behavior: smooth; }
+body { 
+  background: var(--bg); 
+  color: var(--text); 
+  font-family: 'Inter', sans-serif; 
+  font-size: 15px; 
+  line-height: 1.65; 
+  letter-spacing: -0.01em;
+  overflow-x: hidden; 
 }
 
-/* Animated DAG canvas */
-#dag-canvas{
-  position:absolute;inset:0;opacity:0.55;
+/* ── TYPOGRAPHY OVERRIDES ── */
+h1, h2, h3, h4, .serif {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
-.hero-content{position:relative;z-index:2;max-width:820px}
+/* ── NAVIGATION ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 3rem; height: 70px;
+  background: rgba(252, 251, 249, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'EB Garamond', serif; font-weight: 600; font-size: 1.25rem;
+  color: var(--text); letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--accent-gold); font-weight: 400; font-style: italic; }
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+  transition: color 0.2s; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.nav-links a:hover { color: var(--text); }
 
-.eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:500;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--orange-l);
-  border:1px solid rgba(224,123,42,0.3);border-radius:20px;
-  padding:5px 14px;margin-bottom:1.8rem;
-  background:rgba(224,123,42,0.06);
+/* ── HERO SECTION ── */
+.hero {
+  min-height: 90vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8rem 2rem 6rem; text-align: center;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
 }
-.eyebrow::before{content:'⚛';font-size:1em}
+#dag-canvas { position: absolute; inset: 0; opacity: 0.85; pointer-events: none; }
+.hero-content { position: relative; z-index: 2; max-width: 840px; }
 
-h1{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(2.2rem,5.5vw,3.8rem);
-  font-weight:700;line-height:1.1;
-  letter-spacing:-1.5px;
-  margin-bottom:1rem;
-}
-h1 .line1{color:var(--text)}
-h1 .line2{
-  background:linear-gradient(135deg,var(--blue-l) 0%,var(--violet-l) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-
-.hero-sub{
-  color:var(--muted);font-size:1.05rem;max-width:560px;margin:0 auto 2.8rem;
-  font-weight:400;line-height:1.7;
-}
-.hero-sub strong{color:var(--text)}
-
-.cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3.5rem}
-
-.btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:0.75rem 1.8rem;border-radius:8px;
-  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.95rem;
-  text-decoration:none;transition:all 0.2s;letter-spacing:0.2px;cursor:pointer;
-  border:none;
-}
-.btn-primary{
-  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-l) 100%);
-  color:#fff;box-shadow:0 4px 20px rgba(26,86,160,0.4);
-}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(26,86,160,0.55)}
-.btn-secondary{
-  background:transparent;color:var(--text);
-  border:1px solid var(--border);
-}
-.btn-secondary:hover{border-color:var(--blue);color:var(--blue-ll);background:rgba(26,86,160,0.08)}
-.btn-violet{
-  background:linear-gradient(135deg,var(--violet) 0%,var(--violet-l) 100%);
-  color:#fff;box-shadow:0 4px 20px rgba(109,63,160,0.35);
-}
-.btn-violet:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(109,63,160,0.5)}
-
-/* metric strip */
-.metrics{
-  display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;
-  padding-top:2rem;border-top:1px solid var(--border);
-}
-.metric .val{
-  font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;
-  color:var(--blue-ll);
-}
-.metric .lbl{font-size:0.75rem;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:2px}
-
-/* ── SECTION BASE ── */
-section{padding:5rem 2rem}
-.inner{max-width:1060px;margin:0 auto}
-.section-label{
-  font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:2.5px;
-  text-transform:uppercase;color:var(--orange-l);margin-bottom:0.8rem;
-}
-.section-title{
-  font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);
-  font-weight:700;letter-spacing:-0.5px;margin-bottom:1rem;
-}
-.section-body{color:var(--muted);max-width:680px;line-height:1.75;margin-bottom:2.5rem}
-
-/* ── WHAT IS IT ── */
-.what{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-
-.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
-.feature-card{
-  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
-  padding:1.4rem 1.5rem;transition:border-color 0.2s,transform 0.2s;
-}
-.feature-card:hover{border-color:var(--blue);transform:translateY(-2px)}
-.feature-icon{font-size:1.5rem;margin-bottom:0.7rem}
-.feature-card h3{
-  font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;
-  color:var(--text);margin-bottom:0.4rem;
-}
-.feature-card p{font-size:0.85rem;color:var(--muted);line-height:1.6}
-
-/* ── HOW IT WORKS ── */
-.steps{display:flex;flex-direction:column;gap:0;position:relative}
-.steps::before{
-  content:'';position:absolute;left:22px;top:0;bottom:0;width:2px;
-  background:linear-gradient(to bottom,var(--blue),var(--violet));opacity:0.3;
-}
-.step{display:flex;gap:1.5rem;padding:1.5rem 0;align-items:flex-start}
-.step-num{
-  flex-shrink:0;width:46px;height:46px;border-radius:50%;
-  background:linear-gradient(135deg,var(--blue),var(--violet));
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;
-  color:#fff;position:relative;z-index:1;box-shadow:0 0 0 4px var(--bg);
-}
-.step-content h3{
-  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;
-  color:var(--text);margin-bottom:0.3rem;
-}
-.step-content p{font-size:0.875rem;color:var(--muted);line-height:1.65}
-.step-content code{
-  font-family:'JetBrains Mono',monospace;font-size:0.8rem;
-  background:var(--bg3);border:1px solid var(--border);
-  padding:1px 6px;border-radius:4px;color:var(--blue-ll);
+.eyebrow {
+  display: inline-block; font-family: 'Inter', sans-serif; font-size: 0.75rem; 
+  font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent-gold); border-bottom: 1px solid var(--accent-gold);
+  padding-bottom: 4px; margin-bottom: 2.5rem;
 }
 
-/* ── TECH STACK ── */
-.stack{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
-.stack-card{
-  border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.2rem;
-  background:var(--bg);transition:border-color 0.2s;
+h1 {
+  font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.1;
+  color: var(--text); margin-bottom: 2rem; font-weight: 400;
 }
-.stack-card:hover{border-color:var(--violet)}
-.stack-tag{
-  font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:1px;
-  text-transform:uppercase;padding:2px 7px;border-radius:4px;
-  margin-bottom:0.6rem;display:inline-block;
-}
-.tag-q{background:rgba(109,63,160,0.2);color:var(--violet-l);border:1px solid rgba(109,63,160,0.3)}
-.tag-c{background:rgba(26,86,160,0.2);color:var(--blue-ll);border:1px solid rgba(26,86,160,0.3)}
-.tag-v{background:rgba(224,123,42,0.15);color:var(--orange-l);border:1px solid rgba(224,123,42,0.25)}
-.stack-card h3{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.25rem}
-.stack-card p{font-size:0.8rem;color:var(--muted);line-height:1.55}
+h1 span { font-style: italic; color: var(--accent-navy); }
 
-/* ── FORMULA BLOCK ── */
-.formula-section{border-top:1px solid var(--border)}
-.formula-box{
-  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
-  padding:1.8rem 2rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;
-  font-size:1.1rem;color:var(--blue-ll);text-align:center;
-  line-height:2;
+.hero-sub {
+  color: var(--text-muted); font-size: 1.2rem; font-family: 'EB Garamond', serif;
+  max-width: 640px; margin: 0 auto 3.5rem; line-height: 1.5; font-style: italic;
 }
-.formula-box .label{
-  font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--muted);margin-bottom:0.5rem;font-family:'Inter',sans-serif;
-}
-.formula-box .eq{font-size:1.05rem}
+.hero-sub strong { color: var(--text); font-weight: 500; font-style: normal; }
 
-/* ── BUGS SECTION ── */
-.bugs-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.bug-list{display:flex;flex-direction:column;gap:0.7rem}
-.bug-item{
-  display:flex;gap:1rem;align-items:flex-start;
-  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
-  padding:0.9rem 1.1rem;transition:border-color 0.2s;
-}
-.bug-item:hover{border-color:var(--orange)}
-.bug-num{
-  flex-shrink:0;width:26px;height:26px;border-radius:5px;
-  background:rgba(224,123,42,0.15);border:1px solid rgba(224,123,42,0.3);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:500;color:var(--orange-l);
-}
-.bug-text strong{font-size:0.875rem;color:var(--text);font-weight:500}
-.bug-text p{font-size:0.8rem;color:var(--muted);margin-top:2px;line-height:1.5}
+.cta-row { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 5rem; }
 
-/* ── DEPLOY CTA ── */
-.deploy{text-align:center;padding:5rem 2rem;border-top:1px solid var(--border)}
-.deploy h2{
-  font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);
-  font-weight:700;letter-spacing:-0.5px;margin-bottom:0.8rem;
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem 2rem; border-radius: 0px; /* Sharp corners for a premium, non-app look */
+  font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
+  text-decoration: none; transition: all 0.2s ease; cursor: pointer;
 }
-.deploy p{color:var(--muted);margin-bottom:2rem}
+.btn-primary { background: var(--accent-navy); color: #fff; border: 1px solid var(--accent-navy); }
+.btn-primary:hover { background: #243e56; border-color: #243e56; }
+.btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--text); }
+.btn-secondary:hover { background: var(--text); color: var(--bg); }
+.btn-outline { background: transparent; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+.btn-outline:hover { background: var(--accent-gold); color: #fff; }
+
+/* ── METRIC STRIP ── */
+.metrics {
+  display: flex; gap: 4rem; justify-content: center; flex-wrap: wrap;
+  padding-top: 3rem; border-top: 1px solid var(--border);
+}
+.metric { text-align: left; }
+.metric .val {
+  font-family: 'EB Garamond', serif; font-size: 2.5rem; font-weight: 400;
+  color: var(--accent-navy); line-height: 1;
+}
+.metric .lbl { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; font-weight: 600; }
+
+/* ── SECTION STRUCTURING ── */
+section { padding: 7rem 2rem; border-bottom: 1px solid var(--border); }
+.inner { max-width: 1000px; margin: 0 auto; }
+.section-label {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent-gold); margin-bottom: 1.5rem; font-weight: 600;
+}
+.section-title { font-size: clamp(2rem, 3.5vw, 2.8rem); color: var(--text); margin-bottom: 1.5rem; font-weight: 400; }
+.section-body { color: var(--text-muted); font-size: 1.05rem; max-width: 760px; line-height: 1.7; margin-bottom: 4rem; }
+
+/* ── FEATURE/DOCUMENTATION GRID ── */
+.features { background: var(--bg-muted); }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.feature-card {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 2.5rem 2rem; transition: border-color 0.2s ease;
+}
+.feature-card:hover { border-color: var(--border-dark); }
+.feature-card h3 { font-size: 1.35rem; color: var(--accent-navy); margin-bottom: 0.75rem; }
+.feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+/* ── MATHEMATICAL SCRIPTS ── */
+.formula-box {
+  background: var(--bg-muted); border: 1px solid var(--border);
+  padding: 3rem 2rem; margin: 3rem 0; text-align: center;
+}
+.formula-box .label {
+  font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 600;
+}
+.formula-box .eq { font-family: 'Fira Code', monospace; font-size: 1.1rem; color: var(--text); word-spacing: -1px; font-weight: 500; }
+.formula-box .subtext { font-size: 0.85rem; color: var(--text-muted); margin-top: 1.5rem; }
+
+/* ── SEQUENTIAL STEPS ── */
+.steps { display: flex; flex-direction: column; gap: 2.5rem; }
+.step { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; align-items: flex-start; }
+.step-num {
+  font-family: 'EB Garamond', serif; font-size: 2rem; font-style: italic;
+  color: var(--accent-gold); border-bottom: 1px solid var(--border-dark); line-height: 1.1;
+}
+.step-content h3 { font-size: 1.35rem; color: var(--text); margin-bottom: 0.5rem; }
+.step-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.65; }
+.step-content code {
+  font-family: 'Fira Code', monospace; font-size: 0.85rem; background: var(--bg-muted);
+  padding: 2px 6px; border: 1px solid var(--border); color: var(--text);
+}
+
+/* ── STACK AND IMPLEMENTATION ── */
+.stack { background: var(--bg-muted); }
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+.stack-card { border: 1px solid var(--border); padding: 1.5rem; background: var(--bg); }
+.stack-tag {
+  font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 2px 6px; border: 1px solid var(--border-dark);
+  margin-bottom: 1rem; display: inline-block; color: var(--text-muted); font-weight: 500;
+}
+.stack-card h3 { font-size: 1.2rem; color: var(--text); margin-bottom: 0.5rem; }
+.stack-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+/* ── REVISED LOGS / DISCOVERY TABLE ── */
+.bugs-section { background: var(--bg); }
+.bug-list { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+.bug-item {
+  display: grid; grid-template-columns: 50px 1fr; gap: 2rem; padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.bug-num { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+.bug-text strong { font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--text); font-weight: 600; display: block; margin-bottom: 4px; }
+.bug-text p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* ── FINAL ARRIVAL BLOCK ── */
+.deploy { text-align: center; padding: 8rem 2rem; background: var(--bg-muted); }
+.deploy h2 { font-size: 2.8rem; margin-bottom: 1rem; font-weight: 400; }
+.deploy p { color: var(--text-muted); font-family: 'EB Garamond', serif; font-style: italic; font-size: 1.2rem; margin-bottom: 3rem; }
 
 /* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--border);padding:2rem;
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+footer {
+  padding: 3rem; display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1.5rem; background: var(--bg); border-top: 1px solid var(--border);
 }
-footer p{font-size:0.8rem;color:var(--muted)}
-footer a{color:var(--muted);text-decoration:none;font-size:0.8rem}
-footer a:hover{color:var(--blue-ll)}
+footer p { font-size: 0.8rem; color: var(--text-muted); }
+footer a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; border-bottom: 1px solid transparent; }
+footer a:hover { color: var(--text); border-bottom-color: var(--text); }
 
-/* ── RESPONSIVE ── */
-@media(max-width:640px){
-  nav{padding:0 1.2rem}
-  .nav-links{display:none}
-  h1{letter-spacing:-0.5px}
-  .metrics{gap:1.5rem}
-  .step{flex-direction:column;gap:0.8rem}
-  footer{flex-direction:column;text-align:center}
+/* ── RESPONSIVE RESPONSIVENESS ── */
+@media(max-width: 768px) {
+  nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .metrics { gap: 2rem; justify-content: flex-start; }
+  .bug-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  footer { flex-direction: column; text-align: center; }
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">⚛ Quantum<span>Nuclear</span></div>
+  <div class="nav-logo">Quantum <span>Nuclear</span></div>
   <div class="nav-links">
-    <a href="#what">About</a>
-    <a href="#how">How It Works</a>
-    <a href="#stack">Stack</a>
-    <a href="#bugs">Development</a>
-    <a href="demo.html">Live Demo</a>
-    <a href="proposal.pdf">Proposal PDF</a>
+    <a href="#what">Overview</a>
+    <a href="#how">Methodology</a>
+    <a href="#stack">Infrastructure</a>
+    <a href="#bugs">Revisions</a>
+    <a href="demo.html">Interactive Interface</a>
+    <a href="proposal.pdf">Documentation</a>
   </div>
 </nav>
 
-<!-- ── HERO ── -->
 <section class="hero">
   <canvas id="dag-canvas"></canvas>
   <div class="hero-content">
-    <div class="eyebrow">Project Proposal</div>
-    <h1>
-      <div class="line1">Nuclear Level Scheme</div>
-      <div class="line2">Quantum-Enhanced</div>
-    </h1>
+    <div class="eyebrow">Academic Project Proposal</div>
+    <h1>Nuclear Level Scheme Reconstruction via <span>Quantum Execution</span></h1>
     <p class="hero-sub">
-      Reconstructing nuclear energy states from gamma-ray coincidence data using
-      <strong>graph theory</strong> and the
-      <strong>Quantum Approximate Optimisation Algorithm</strong>.
-      Built on Demand (2009), University of Guelph.
+      A systematic application mapping core nuclear energy states from raw gamma-ray coincidence boundaries using advanced graph mechanics and the Quantum Approximate Optimisation Algorithm.
     </p>
     <div class="cta-row">
-      <a href="demo.html" class="btn btn-primary">⚡ Launch Interactive Demo</a>
-      <a href="proposal.pdf" class="btn btn-violet" target="_blank">📄 Read Full Proposal</a>
-      <a href="#what" class="btn btn-secondary">Learn More ↓</a>
+      <a href="demo.html" class="btn btn-primary">Execute Interactive Interface</a>
+      <a href="proposal.pdf" class="btn btn-outline" target="_blank">View Research Proposal</a>
+      <a href="#what" class="btn btn-secondary">Project Framework</a>
     </div>
     <div class="metrics">
-      <div class="metric"><div class="val">8</div><div class="lbl">Bugs Found & Fixed</div></div>
-      <div class="metric"><div class="val">QAOA</div><div class="lbl">Quantum Method</div></div>
-      <div class="metric"><div class="val">2</div><div class="lbl">Test Datasets</div></div>
-      <div class="metric"><div class="val">4</div><div class="lbl">Output Formats</div></div>
+      <div class="metric"><div class="val">08</div><div class="lbl">Resolved Corruptions</div></div>
+      <div class="metric"><div class="val">QAOA</div><div class="lbl">Algorithmic Base</div></div>
+      <div class="metric"><div class="val">02</div><div class="lbl">Validation Matrices</div></div>
+      <div class="metric"><div class="val">04</div><div class="lbl">Export Strategies</div></div>
     </div>
   </div>
 </section>
 
-<!-- ── WHAT IS IT ── -->
-<section class="what" id="what">
+<section class="features" id="what">
   <div class="inner">
-    <div class="section-label">Overview</div>
-    <h2 class="section-title">What Does It Do?</h2>
+    <div class="section-label">Institutional Overview</div>
+    <h2 class="section-title">Functional Mandate</h2>
     <p class="section-body">
-      Nuclear level schemes map the quantum energy states inside an atomic nucleus.
-      Building them from experimental data currently takes human experts months.
-      This application automates the process — classically and with a quantum solver —
-      making the comparison direct and scientifically meaningful.
+      Nuclear level schemes trace structural pathways within an excited atomic nucleus. Mapping these configurations manually presents significant multi-month validation dependencies. This software pipeline provides automated baseline resolution, operating across classical parameters and comparative quantum execution layers to accelerate structural analysis.
     </p>
     <div class="feature-grid">
       <div class="feature-card">
-        <div class="feature-icon">📂</div>
-        <h3>Flexible Input</h3>
-        <p>Upload a raw gamma-ray coincidence matrix or a transition list. Both formats produce the same internal directed graph.</p>
+        <h3>Comprehensive Ingestion</h3>
+        <p>Processes structural transition tables alongside raw validation matrices uniformly down into native directed acyclic graph arrays.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🔬</div>
-        <h3>Classical Baseline</h3>
-        <p>BFS reconstruction from the ground state upward, scored with Demand's intensity-weighted energy self-consistency formula.</p>
+        <h3>Classical Verification</h3>
+        <p>Constructs upward analytical trajectories calibrated through algorithmic intensity and structural constraint functions.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>QAOA Quantum Solver</h3>
-        <p>Cost Hamiltonian encodes coincidence constraints. PennyLane optimises variational parameters; every 5 steps the Demand Score is tracked.</p>
+        <h3>Quantum Approximate Optimisation</h3>
+        <p>Utilises multi-parametric variational matrices inside PennyLane loops to track progressive evaluation boundaries every five operational intervals.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Real Comparison</h3>
-        <p>Convergence plot shows Demand Score vs. QAOA step — both axes are the same quantity, directly comparable.</p>
+        <h3>Normalized Performance Matrices</h3>
+        <p>Plots direct alignment indices across identical evaluation thresholds, ensuring balanced scientific benchmarking.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">💾</div>
-        <h3>4 Export Formats</h3>
-        <p>Level scheme PNG, ENSDF nuclear data file, CSV level table, and full JSON results including energy history.</p>
+        <h3>Structural Exports</h3>
+        <p>Generates production-ready output sets including vector layouts, system matrices, configuration datasets, and historical logs.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🔌</div>
-        <h3>IBM Quantum Ready</h3>
-        <p>Switch from Aer simulator to real IBM Quantum hardware with a single API key. Circuit transpilation is automatic.</p>
+        <h3>Hardware Integration</h3>
+        <p>Transitions transparently from classical simulated tracking matrices directly to physical deployment environments via direct secure access keys.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── FORMULA ── -->
-<section class="formula-section" id="formula">
+<section id="formula">
   <div class="inner">
-    <div class="section-label">Demand's Formula</div>
-    <h2 class="section-title">The Scoring Function</h2>
+    <div class="section-label">Mathematical Framework</div>
+    <h2 class="section-title">The Evaluation Objective</h2>
     <p class="section-body">
-      Every candidate level scheme is scored with Demand's analytical self-consistency formula.
-      Both solvers minimise the same quantity — making the comparison meaningful.
+      Every computed state configuration undergoes rigorous verification against empirical evaluation functions, ensuring absolute fidelity to established structural rules across both execution modes.
     </p>
     <div class="formula-box">
-      <div class="label">Demand Score — equation (2) of the proposal</div>
-      <div class="eq">𝒮 = Σᵢ wᵢ · | (E<sub style="font-size:0.7em">from_i</sub> − E<sub style="font-size:0.7em">to_i</sub>) − E<sub style="font-size:0.7em">γᵢ</sub> |</div>
-      <div style="font-size:0.78rem;color:var(--muted);margin-top:0.8rem;font-family:'Inter',sans-serif">
-        where &nbsp; wᵢ = Iᵢ / 1000 &nbsp; (intensity weight) &nbsp;·&nbsp; 𝒮 = 0 means perfect self-consistency
+      <div class="label">System Consistency Objective Function — Equation (2)</div>
+      <div class="eq">𝒮 = Σᵢ wᵢ · | (E<sub>from_i</sub> − E<sub>to_i</sub>) − E<sub>γᵢ</sub> |</div>
+      <div class="subtext">
+        where &nbsp; <strong>wᵢ = Iᵢ / 1000</strong> &nbsp; denotes structural intensity parameters &nbsp;·&nbsp; <strong> solicitor 𝒮 = 0</strong> signals absolute systemic equilibrium.
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── HOW IT WORKS ── -->
 <section id="how">
   <div class="inner">
-    <div class="section-label">Methodology</div>
-    <h2 class="section-title">How It Works</h2>
-    <p class="section-body">Five steps from raw detector data to a quantum-solved level scheme.</p>
+    <div class="section-label">Execution Logic</div>
+    <h2 class="section-title">Methodology Sequence</h2>
+    <p class="section-body">The workflow transitions raw physical capture events into verified mathematical states through five primary phases.</p>
     <div class="steps">
       <div class="step">
-        <div class="step-num">1</div>
+        <div class="step-num">01</div>
         <div class="step-content">
-          <h3>Data Ingestion</h3>
-          <p>Upload a coincidence matrix <code>.csv</code> or transition list with columns <code>id, energy_keV, intensity, from_level, to_level</code>. Two test datasets (Ba-133, Co-60) are bundled — no upload needed to start.</p>
+          <h3>Empirical Data Registration</h3>
+          <p>The processing architecture imports raw interaction data structured inside custom <code>.csv</code> schemas containing primary identifier, energy bounds, and source parameters. Preloaded baseline matrices (Barium-133 and Cobalt-60) are included for automated integration testing.</p>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">2</div>
+        <div class="step-num">02</div>
         <div class="step-content">
-          <h3>Graph Construction</h3>
-          <p>Transitions become directed edges in a NetworkX DAG. Ground state is detected algorithmically as the sink node — fully name-agnostic. Works with <code>GS</code>, <code>ground</code>, <code>0+</code>, or any custom name.</p>
+          <h3>Topological Graph Compilation</h3>
+          <p>Observed decay cascades are converted into active topological trajectories inside algorithmic data maps. Sinks are evaluated automatically based on geometric convergence states independent of explicit label identities.</p>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">3</div>
+        <div class="step-num">03</div>
         <div class="step-content">
-          <h3>Classical Baseline</h3>
-          <p>BFS from ground state upward reconstructs level energies in O(V+E). The Demand Score 𝒮 is computed as the reference. Runs in &lt;1 ms for Ba-133.</p>
+          <h3>Baseline Array Calculation</h3>
+          <p>Breadth-first spatial algorithms evaluate system trajectories relative to primary grounds within sub-millisecond timelines, outputting reference indexes for subsequent algorithmic evaluations.</p>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">4</div>
+        <div class="step-num">04</div>
         <div class="step-content">
-          <h3>QAOA Quantum Solver</h3>
-          <p>The cost Hamiltonian encodes intensity rewards and coincidence constraints with chain bonuses (κ = 1.2). PennyLane optimises (γ, β) parameters over N steps with Adam. The bitstring is decoded as a BFS ordering — all transitions always used.</p>
+          <h3>Variational Optimization</h3>
+          <p>System models map configuration objectives to mathematical operators, using standard numerical optimization layers to iteratively balance sequence distributions alongside designated continuity values.</p>
         </div>
       </div>
       <div class="step">
-        <div class="step-num">5</div>
+        <div class="step-num">05</div>
         <div class="step-content">
-          <h3>Output</h3>
-          <p>Level scheme diagrams (classical in green, quantum in blue), convergence plot with matching Demand Score axes, circuit diagram with optimised parameters, and four export formats.</p>
+          <h3>Structural Documentation</h3>
+          <p>Compiles completed physical configurations, structural matrices, execution circuit diagnostics, and data structures across multiple independent open files.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── STACK ── -->
 <section class="stack" id="stack">
   <div class="inner">
-    <div class="section-label">Technology</div>
-    <h2 class="section-title">Stack</h2>
-    <p class="section-body">Two distinct quantum primitives, one unified classical-quantum pipeline.</p>
+    <div class="section-label">Infrastructure Profile</div>
+    <h2 class="section-title">Software Components</h2>
+    <p class="section-body">A unified architecture managing modern analytical libraries across classical and quantum hardware abstractions.</p>
     <div class="stack-grid">
-      <div class="stack-card"><span class="stack-tag tag-q">Quantum</span><h3>PennyLane</h3><p>QAOA engine with automatic differentiation. Adam optimiser for hybrid classical-quantum loops.</p></div>
-      <div class="stack-card"><span class="stack-tag tag-q">Quantum</span><h3>Qiskit</h3><p>Circuit construction, Aer cloud simulator, IBM Quantum hardware access and transpilation.</p></div>
-      <div class="stack-card"><span class="stack-tag tag-q">Quantum (high-level)</span><h3>qiskit-optimization</h3><p>Encodes level ordering as a QuadraticProgram (QUBO). Specialised higher-level abstraction — no raw gates needed.</p></div>
-      <div class="stack-card"><span class="stack-tag tag-c">Classical</span><h3>NetworkX</h3><p>Directed graph construction and BFS reconstruction of Demand's transition-centric representation.</p></div>
-      <div class="stack-card"><span class="stack-tag tag-c">Classical</span><h3>NumPy / SciPy</h3><p>Coincidence matrix processing, intensity normalisation, statistical scoring.</p></div>
-      <div class="stack-card"><span class="stack-tag tag-v">Frontend</span><h3>Streamlit</h3><p>Browser-based single-file deployment. Run locally with one command.</p></div>
-      <div class="stack-card"><span class="stack-tag tag-v">Visualisation</span><h3>Matplotlib</h3><p>Level scheme diagrams, convergence plots, coincidence heatmaps, QAOA energy history.</p></div>
+      <div class="stack-card"><span class="stack-tag">Quantum Engine</span><h3>PennyLane</h3><p>Differentiable calculation structures controlling real-time gradient optimization routines.</p></div>
+      <div class="stack-card"><span class="stack-tag">Hardware Access</span><h3>Qiskit</h3><p>Circuit construction and compilation protocols targeted for remote hardware arrays.</p></div>
+      <div class="stack-card"><span class="stack-tag">Mathematical Logic</span><h3>Qiskit Optimization</h3><p>Translates sequential optimization logic into abstract quadratic assignment architectures.</p></div>
+      <div class="stack-card"><span class="stack-tag">Data Mapping</span><h3>NetworkX</h3><p>Handles core graph routing structures and systemic array indexing loops.</p></div>
+      <div class="stack-card"><span class="stack-tag">Computation</span><h3>NumPy / SciPy</h3><p>Performs linear transformations, array normalizations, and empirical statistical scoring.</p></div>
+      <div class="stack-card"><span class="stack-tag">Interface</span><h3>Streamlit</h3><p>Provides zero-latency, local script deployments engineered around clean interface layouts.</p></div>
+      <div class="stack-card"><span class="stack-tag">Graphics</span><h3>Matplotlib</h3><p>Renders academic vector visualisations, state charts, and structural histories.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── BUGS ── -->
 <section class="bugs-section" id="bugs">
   <div class="inner">
-    <div class="section-label">Development Log</div>
-    <h2 class="section-title">8 Bugs Found & Fixed</h2>
-    <p class="section-body">A systematic audit of the codebase identified and resolved eight bugs spanning logic, visualisation, and data export.</p>
+    <div class="section-label">Development Registry</div>
+    <h2 class="section-title">Codebase Revisions</h2>
+    <p class="section-body">A comprehensive architectural evaluation successfully isolated and corrected eight critical structural processing vulnerabilities within the application core.</p>
     <div class="bug-list">
-      <div class="bug-item"><div class="bug-num">1</div><div class="bug-text"><strong>Ground state hardcoded to "GS"</strong><p>Fixed: detection now uses energy = 0, works for any level naming convention.</p></div></div>
-      <div class="bug-item"><div class="bug-num">2</div><div class="bug-text"><strong>demand_history uninitialised when quantum solver skipped</strong><p>Fixed: initialised to [] unconditionally before the quantum branch.</p></div></div>
-      <div class="bug-item"><div class="bug-num">3</div><div class="bug-text"><strong>demand_history undefined in exception handler</strong><p>Fixed: explicitly added to the except block so fallback always works.</p></div></div>
-      <div class="bug-item"><div class="bug-num">4</div><div class="bug-text"><strong>Stale session results after dataset switch</strong><p>Fixed: session state cleared when dataset name changes.</p></div></div>
-      <div class="bug-item"><div class="bug-num">5</div><div class="bug-text"><strong>Hamiltonian missing energy self-consistency weighting</strong><p>Fixed: chain bonus κ = 1.2 added for transitions that feed into each other.</p></div></div>
-      <div class="bug-item"><div class="bug-num">6</div><div class="bug-text"><strong>Division-by-zero if all intensities are zero</strong><p>Fixed: max(intensity) or 1 guard added to arrow alpha calculation.</p></div></div>
-      <div class="bug-item"><div class="bug-num">7</div><div class="bug-text"><strong>CSV export sorted quantum-only levels incorrectly</strong><p>Fixed: sort key falls back to quantum energy when classical energy is absent.</p></div></div>
-      <div class="bug-item"><div class="bug-num">8</div><div class="bug-text"><strong>JSON export crashed on NumPy arrays</strong><p>Fixed: recursive _json_safe() converter applied before json.dumps().</p></div></div>
+      <div class="bug-item"><div class="bug-num">01</div><div class="bug-text"><strong>Ground state identifier dependency isolated</strong><p>Corrected text mapping paradigms to identify primary nodes explicitly via zero-point tracking instead of literal text tags.</p></div></div>
+      <div class="bug-item"><div class="bug-num">02</div><div class="bug-text"><strong>Uninitialized evaluation history array</strong><p>Stabilized data loops by instantiating the telemetry tracking objects globally prior to execution branch splitting.</p></div></div>
+      <div class="bug-item"><div class="bug-num">03</div><div class="bug-text"><strong>Exception handling state separation</strong><p>Ensured persistent fallback telemetry paths are maintained inside tracking matrices across all unexpected processing interruptions.</p></div></div>
+      <div class="bug-item"><div class="bug-num">04</div><div class="bug-text"><strong>Stale session configuration storage</strong><p>Rebuilt memory handlers to drop active processing snapshots immediately during runtime target re-allocation.</p></div></div>
+      <div class="bug-item"><div class="bug-num">05</div><div class="bug-text"><strong>Objective function sequence decoupling</strong><p>Integrated directional weight considerations directly into target models to capture continuous systemic dependencies cleanly.</p></div></div>
+      <div class="bug-item"><div class="bug-num">06</div><div class="bug-text"><strong>Zero-value division safety boundaries</strong><p>Implemented structural limit ceilings to safeguard visual transparency computations during low-intensity evaluation phases.</p></div></div>
+      <div class="bug-item"><div class="bug-num">07</div><div class="bug-text"><strong>Export sequence sorting misalignment</strong><p>Updated output data sorting routines to automatically employ numerical fallbacks when tracking indexes are omitted.</p></div></div>
+      <div class="bug-item"><div class="bug-num">08</div><div class="bug-text"><strong>Structured payload transformation exception</strong><p>Deployed recursive serialization filters to safely drop primitive multi-dimensional array dependencies prior to data streaming.</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- ── CTA ── -->
 <section class="deploy">
   <div class="inner">
-    <h2>Try It Yourself</h2>
-    <p>Run the interactive demo in your browser, or download the full proposal PDF.</p>
+    <h2>Interactive Testing</h2>
+    <p>Initiate standard processing pipelines locally or examine the full analytical architecture documentation.</p>
     <div class="cta-row">
-      <a href="demo.html" class="btn btn-primary">⚡ Launch Interactive Demo</a>
-      <a href="proposal.pdf" class="btn btn-violet" target="_blank">📄 Full Proposal (PDF)</a>
+      <a href="demo.html" class="btn btn-primary">Run Interface Session</a>
+      <a href="proposal.pdf" class="btn btn-outline" target="_blank">Download Documentation (PDF)</a>
     </div>
-    <p style="font-size:0.8rem;color:var(--muted);margin-top:1.5rem">
-      To run the full Python app locally:
-      <code style="font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:2px 8px;border-radius:4px;color:var(--blue-ll)">streamlit run app.py</code>
+    <p style="font-size: 0.8rem; color: var(--text-muted); font-family: 'Fira Code', monospace; margin-top: 2.5rem;">
+      Local environment orchestration statement: <span style="background: var(--bg); padding: 4px 8px; border: 1px solid var(--border)">streamlit run app.py</span>
     </p>
   </div>
 </section>
 
 <footer>
-  <p>Based on Demand, G.A. (2009) · University of Guelph · Quantum-Enhanced Nuclear Level Scheme Determination</p>
-  <div style="display:flex;gap:1.5rem">
-    <a href="demo.html">Demo</a>
-    <a href="proposal.pdf">Proposal</a>
+  <p>Derived from Demand, G.A. (2009) · Department of Physics, University of Guelph · Automated Structural Configuration Systems</p>
+  <div style="display: flex; gap: 2rem;">
+    <a href="demo.html">Interface</a>
+    <a href="proposal.pdf">Documentation</a>
   </div>
 </footer>
 
 <script>
-// ── Animated DAG in hero canvas ──────────────────────────────────────────────
+// ── Refined Academic Network Canvas Logic ────────────────────────────────────
 const canvas = document.getElementById('dag-canvas');
 const ctx = canvas.getContext('2d');
 
-function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resize();
 window.addEventListener('resize', resize);
 
-// Ba-133 level scheme as node positions (normalised)
 const levels = [
-  {id:'GS', y:0.82, label:'GS · 0.0 keV'},
-  {id:'L1', y:0.66, label:'L1 · 160.6 keV'},
-  {id:'L2', y:0.54, label:'L2 · 241.5 keV'},
-  {id:'L3', y:0.37, label:'L3 · 383.8 keV'},
-  {id:'L4', y:0.20, label:'L4 · 516.6 keV'},
+  { id: 'GS', y: 0.80, label: 'Ground State · 0.0 keV' },
+  { id: 'L1', y: 0.65, label: 'Level I · 160.6 keV' },
+  { id: 'L2', y: 0.52, label: 'Level II · 241.5 keV' },
+  { id: 'L3', y: 0.38, label: 'Level III · 383.8 keV' },
+  { id: 'L4', y: 0.22, label: 'Level IV · 516.6 keV' },
 ];
 
 const edges = [
-  {from:3, to:0, label:'383.8', intensity:0.894},
-  {from:3, to:1, label:'276.4', intensity:0.716},
-  {from:4, to:1, label:'356.0', intensity:0.620},
-  {from:4, to:2, label:'302.9', intensity:0.183},
-  {from:2, to:1, label:'80.9',  intensity:0.340},
-  {from:1, to:0, label:'160.6', intensity:0.645},
+  { from: 3, to: 0, label: '383.8', intensity: 0.894 },
+  { from: 3, to: 1, label: '276.4', intensity: 0.716 },
+  { from: 4, to: 1, label: '356.0', intensity: 0.620 },
+  { from: 4, to: 2, label: '302.9', intensity: 0.183 },
+  { from: 2, to: 1, label: '80.9',  intensity: 0.340 },
+  { from: 1, to: 0, label: '160.6', intensity: 0.645 },
 ];
 
-// Particle system for animated edges
-const particles = edges.map((e,i)=>({
-  edge:i, t:Math.random(), speed:0.003+Math.random()*0.002,
-  opacity:0
+const particles = edges.map((e, i) => ({
+  edge: i, t: Math.random(), speed: 0.0015 + Math.random() * 0.0015
 }));
-let t = 0;
+let tick = 0;
 
-function getNodePos(idx){
-  const margin = 0.25;
-  const spread = 0.5;
-  const x = margin + spread * 0.5 + (idx % 2 === 0 ? -0.05 : 0.05) * spread;
-  return {x: canvas.width * x, y: canvas.height * levels[idx].y};
-}
-
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  t += 0.008;
-
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  tick += 0.005;
   const cx = canvas.width * 0.5;
 
-  // Draw energy levels as horizontal lines
-  levels.forEach((lv,i)=>{
+  // Render Horizontal State Baselines
+  levels.forEach((lv, i) => {
     const y = canvas.height * lv.y;
-    const w = canvas.width * 0.28;
-    const x0 = cx - w/2;
-    const alpha = 0.18 + 0.08 * Math.sin(t + i);
-    const isGS = i === 0;
-    ctx.strokeStyle = isGS
-      ? `rgba(59,183,90,${alpha*1.6})`
-      : `rgba(58,145,210,${alpha})`;
-    ctx.lineWidth = isGS ? 2 : 1.5;
-    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0+w, y); ctx.stroke();
+    const w = canvas.width * 0.25;
+    const x0 = cx - w / 2;
+    const isGround = i === 0;
 
-    // Level label
-    ctx.fillStyle = isGS ? `rgba(59,183,90,${alpha*2})` : `rgba(147,197,253,${alpha*1.8})`;
-    ctx.font = '11px JetBrains Mono, monospace';
-    ctx.fillText(lv.label, x0 + w + 8, y + 4);
+    ctx.strokeStyle = isGround ? 'rgba(26, 46, 64, 0.45)' : 'rgba(184, 181, 173, 0.3)';
+    ctx.lineWidth = isGround ? 2.0 : 1.0;
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0 + w, y); ctx.stroke();
+
+    ctx.fillStyle = isGround ? 'rgba(26, 46, 64, 0.8)' : 'rgba(97, 95, 92, 0.7)';
+    ctx.font = '12px "Fira Code", monospace';
+    ctx.fillText(lv.label, x0 + w + 16, y + 4);
   });
 
-  // Draw edges as glowing arrows
-  edges.forEach((e,i)=>{
-    const from = getNodePos(e.from);
-    const to   = getNodePos(e.to);
-    // override x to be centered
-    from.x = cx - 0.06 * canvas.width + i * 0.02 * canvas.width;
-    to.x   = from.x;
+  // Render System Vectors
+  edges.forEach((e, i) => {
+    const fromX = cx - 0.08 * canvas.width + i * 0.025 * canvas.width;
+    const fromY = canvas.height * levels[e.from].y;
+    const toY = canvas.height * levels[e.to].y;
 
-    const alpha = 0.12 + 0.06 * e.intensity;
-    ctx.strokeStyle = `rgba(224,123,42,${alpha})`;
-    ctx.lineWidth = 1 + e.intensity;
-    ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
+    const baseAlpha = 0.15 + e.intensity * 0.25;
+    ctx.strokeStyle = `rgba(140, 109, 49, ${baseAlpha})`;
+    ctx.lineWidth = 1.0 + e.intensity * 1.2;
+    ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(fromX, toY); ctx.stroke();
 
-    // Arrowhead
-    const ang = Math.atan2(to.y - from.y, to.x - from.x);
-    ctx.fillStyle = `rgba(224,123,42,${alpha*2})`;
+    // Structural Vector Indicators (Arrowheads)
+    const arrowY = toY - 4;
+    ctx.fillStyle = `rgba(140, 109, 49, ${baseAlpha + 0.2})`;
     ctx.beginPath();
-    ctx.moveTo(to.x, to.y);
-    ctx.lineTo(to.x - 7*Math.cos(ang-0.4), to.y - 7*Math.sin(ang-0.4));
-    ctx.lineTo(to.x - 7*Math.cos(ang+0.4), to.y - 7*Math.sin(ang+0.4));
+    ctx.moveTo(fromX, toY);
+    ctx.lineTo(fromX - 4, arrowY);
+    ctx.lineTo(fromX + 4, arrowY);
     ctx.closePath(); ctx.fill();
 
-    // Energy label
-    const mid = {x:(from.x+to.x)/2+12, y:(from.y+to.y)/2};
-    ctx.fillStyle = `rgba(245,168,85,${alpha*2.5})`;
-    ctx.font = '10px JetBrains Mono, monospace';
-    ctx.fillText(e.label+' keV', mid.x, mid.y);
+    // Identification Typography
+    ctx.fillStyle = `rgba(97, 95, 92, ${baseAlpha + 0.3})`;
+    ctx.font = '10px "Fira Code", monospace';
+    ctx.fillText(e.label, fromX + 8, (fromY + toY) / 2 + 3);
   });
 
-  // Animate photon particles along edges
-  particles.forEach(p=>{
+  // Render Intermittent Node Telemetry Packets
+  particles.forEach(p => {
     p.t += p.speed;
-    if(p.t > 1){ p.t = 0; p.speed = 0.003 + Math.random()*0.002; }
+    if (p.t > 1) { p.t = 0; }
     const e = edges[p.edge];
-    const from = {x: cx - 0.06*canvas.width + p.edge*0.02*canvas.width, y: canvas.height*levels[e.from].y};
-    const to   = {x: from.x, y: canvas.height*levels[e.to].y};
-    const px = from.x + (to.x-from.x)*p.t;
-    const py = from.y + (to.y-from.y)*p.t;
-    const grd = ctx.createRadialGradient(px,py,0,px,py,5);
-    grd.addColorStop(0,'rgba(253,224,100,0.9)');
-    grd.addColorStop(1,'rgba(253,224,100,0)');
-    ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2);
-    ctx.fillStyle = grd; ctx.fill();
+    const x = cx - 0.08 * canvas.width + p.edge * 0.025 * canvas.width;
+    const y0 = canvas.height * levels[e.from].y;
+    const y1 = canvas.height * levels[e.to].y;
+    const currentY = y0 + (y1 - y0) * p.t;
+
+    ctx.fillStyle = 'rgba(26, 46, 64, 0.45)';
+    ctx.beginPath(); ctx.arc(x, currentY, 2.5, 0, Math.PI * 2); ctx.fill();
   });
 
   requestAnimationFrame(draw);
