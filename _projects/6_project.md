@@ -2,7 +2,7 @@
 layout: page
 title: Hardware noise console
 description: Provides theoretical noise calculation for a given circuit. Done as part of the 30 Day challenge.
-img: assets/img/projects/sun.png
+img: assets/img/projects/hardware.png
 importance: 6
 category: Webpages
 ---
