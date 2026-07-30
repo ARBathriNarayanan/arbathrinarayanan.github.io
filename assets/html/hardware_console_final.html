@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hardware Noise Console</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}header{background:#fff;border-bottom:1px solid #ddd;padding:20px}.panel,.kpi{background:#fff;border:1px solid #ddd;border-radius:6px;padding:16px}.panel+.panel{margin-top:12px}main{max-width:1200px;margin:auto;padding:20px;display:grid;grid-template-columns:330px 1fr;gap:18px}.field input,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px}button{background:#2563eb!important;color:#fff!important;border:none;padding:10px;border-radius:4px}</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Hardware Noise Console</h1>
+    <span class="sub">Estimate hardware noise from transmon parameters, also finds theoretical error for a given circuit.</span>
+  </div>
+  <div class="sub" style="font-family:var(--mono); color:var(--dim); font-size:11px;">Leave any field blank to use the IBM-typical default</div>
+</header>
+
+<main>
+  <!-- ===================== INPUTS ===================== -->
+  <div id="inputs">
+
+    <div class="panel">
+      <h2>Transmon (E<sub>J</sub>, E<sub>C</sub>)</h2>
+      <div class="subhead">Gives f01 and anharmonicity</div>
+      <div class="row2">
+        <div class="field"><label>E_J <span class="unit">GHz</span></label><input type="number" id="EJ" placeholder="12.5" step="0.1"></div>
+        <div class="field"><label>E_C <span class="unit">GHz</span></label><input type="number" id="EC" placeholder="0.29" step="0.01"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="accordion" data-target="dec-body"><span><span class="chev">&#9660;</span> Decoherence (T1 / T2)</span></h2>
+      <div class="subhead">Dielectric loss (Q) + pure dephasing (T&phi;)</div>
+      <div id="dec-body" class="accordion-body">
+        <div class="row2">
+          <div class="field"><label>Q (dielectric)</label><input type="number" id="Q" placeholder="3.5e6" step="1e5"></div>
+          <div class="field"><label>T&phi; <span class="unit">&micro;s</span></label><input type="number" id="Tphi" placeholder="120" step="1"></div>
+        </div>
+        <div class="toggle-row">
+          <label for="purcell">Include Purcell decay</label>
+          <div class="switch"><input type="checkbox" id="purcell"><span class="slider"></span></div>
+        </div>
+        <div id="purcell-fields" style="display:none;">
+          <div class="row2">
+            <div class="field"><label>f_r <span class="unit">GHz</span></label><input type="number" id="fr" placeholder="7.0" step="0.1"></div>
+            <div class="field"><label>g <span class="unit">MHz</span></label><input type="number" id="g" placeholder="80" step="1"></div>
+          </div>
+          <div class="field"><label>Q_r (resonator)</label><input type="number" id="Qr" placeholder="15000" step="500"></div>
+          <div id="purcell-warning"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="accordion" data-target="gate-body"><span><span class="chev">&#9660;</span> Gate Durations</span></h2>
+      <div class="subhead">Pulse duration vs T1/T2</div>
+      <div id="gate-body" class="accordion-body">
+        <div class="row2">
+          <div class="field"><label>1Q gate <span class="unit">ns</span></label><input type="number" id="t1q" placeholder="25" step="1"></div>
+          <div class="field"><label>2Q gate <span class="unit">ns</span></label><input type="number" id="t2q" placeholder="400" step="10"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="accordion" data-target="ro-body"><span><span class="chev">&#9660;</span> Readout</span></h2>
+      <div class="subhead">T1 decay during measurement</div>
+      <div id="ro-body" class="accordion-body">
+        <div class="field"><label>Readout duration <span class="unit">ns</span></label><input type="number" id="tro" placeholder="1000" step="50"></div>
+        <div class="toggle-row">
+          <label for="discriminate">Include SNR discrimination</label>
+          <div class="switch"><input type="checkbox" id="discriminate"><span class="slider"></span></div>
+        </div>
+        <div id="disc-fields" style="display:none;">
+          <div class="row2">
+            <div class="field"><label>n&#772; (photon number)</label><input type="number" id="nbar" placeholder="5" step="0.5"></div>
+            <div class="field"><label>t_int <span class="unit">ns</span></label><input type="number" id="tint" placeholder="1000" step="50"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="accordion" data-target="xt-body"><span><span class="chev">&#9660;</span> Crosstalk (static ZZ)</span></h2>
+      <div class="subhead">Neighboring qubit coupling</div>
+      <div id="xt-body" class="accordion-body">
+        <div class="row2">
+          <div class="field"><label>J <span class="unit">MHz</span></label><input type="number" id="J" placeholder="3.0" step="0.1"></div>
+          <div class="field"><label>Detuning <span class="unit">MHz</span></label><input type="number" id="detuning" placeholder="500" step="10"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="accordion" data-target="ctrl-body"><span><span class="chev">&#9660;</span> Control / Calibration</span></h2>
+      <div class="subhead">Miscalibration + leakage to |2&rang;</div>
+      <div id="ctrl-body" class="accordion-body">
+        <div class="row2">
+          <div class="field"><label>Amp error <span class="unit">%</span></label><input type="number" id="ampErr" placeholder="0.3" step="0.05"></div>
+          <div class="field"><label>Phase error <span class="unit">mrad</span></label><input type="number" id="phaseErr" placeholder="2.0" step="0.5"></div>
+        </div>
+        <div class="toggle-row">
+          <label for="drag">Apply DRAG correction</label>
+          <div class="switch"><input type="checkbox" id="drag"><span class="slider"></span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== OUTPUTS ===================== -->
+  <div id="outputs">
+    <div class="kpis">
+      <div class="kpi"><div class="label">f01</div><div class="value small" id="out-f01">—</div></div>
+      <div class="kpi"><div class="label">Anharmonicity</div><div class="value small" id="out-anharm">—</div></div>
+      <div class="kpi"><div class="label">T1 / T2</div><div class="value small" id="out-t1t2">—</div></div>
+    </div>
+
+    <div class="panel gate-panel">
+      <div class="headline"><span class="name"><b>Single-Qubit Gate</b> </span><span class="fid" id="fid-1q">—</span></div>
+      <div id="budget-1q"></div>
+    </div>
+
+    <div class="panel gate-panel">
+      <div class="headline"><span class="name"><b>Two-Qubit Gate</b></span><span class="fid" id="fid-2q">—</span></div>
+      <div id="budget-2q"></div>
+    </div>
+
+    <div class="panel gate-panel">
+      <div class="headline"><span class="name"><b>Readout </b></span><span class="fid" id="fid-ro">—</span></div>
+      <div id="budget-ro"></div>
+    </div>
+  </div>
+</main>
+
+<section style="padding:0 32px 40px; max-width:1400px; margin:0 auto;">
+  <div class="panel">
+    <h2>Circuit</h2>
+    <div class="subhead">paste OpenQASM 2.0 — uses the 1Q / 2Q / readout error currently shown above</div>
+
+    <div class="field">
+      <label>QASM 2.0 source</label>
+      <textarea id="qasmInput" rows="10" style="width:100%; background:#FFFEFA; border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:12.5px; padding:10px; border-radius:4px;">OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[2];
+creg c[2];
+h q[0];
+cx q[0],q[1];
+measure q[0] -> c[0];
+measure q[1] -> c[1];</textarea>
+    </div>
+
+    <div class="row2" style="align-items:end;">
+      <div class="field"><label>Shots</label><input type="number" id="shots" value="2000" step="500"></div>
+      <div class="field">
+        <button id="runCircuitBtn" style="width:100%; padding:9px; background:var(--amber); border:none; border-radius:4px; font-family:var(--mono); font-weight:600; cursor:pointer; color:#1C1A12;">Run Circuit</button>
+      </div>
+    </div>
+
+    <div id="circuit-status" style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:16px;"></div>
+
+    <div class="kpis" style="grid-template-columns:1fr;">
+      <div class="kpi"><div class="label">Hellinger Fidelity (ideal vs noisy)</div><div class="value" id="hellinger-fidelity">—</div></div>
+    </div>
+
+    <div class="grid2" style="grid-template-columns:1fr 1fr; display:grid; gap:16px; margin-top:16px;">
+      <div>
+        <h2 style="font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:10px;">Ideal Counts</h2>
+        <div id="ideal-counts"></div>
+      </div>
+      <div>
+        <h2 style="font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:10px;">Noisy Counts</h2>
+        <div id="noisy-counts"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <!--Physics ported from <code class="inline">transmon.py</code> / <code class="inline">decoherence.py</code> / 
+  <code class="inline">gate_error.py</code> / <code class="inline">readout_error.py</code> /
+  <code class="inline">crosstalk_error.py</code> / <code class="inline">control_error.py</code> /
+  <code class="inline">leakage_error.py</code> — same formulas, computed live in the browser. Blank fields use the
+  same IBM-typical defaults as the Python CLI presets.-->
+  Made by A R Bathri Narayanan
+</footer>
+
+<script>
+// ============================================================
+// Linear algebra: Jacobi eigenvalue algorithm for symmetric matrices
+// (used to exactly diagonalize the transmon Hamiltonian, matching
+// the numpy.linalg.eigh call in transmon.py)
+// ============================================================
+function jacobiEigenvalues(A, maxSweeps = 100, tol = 1e-12) {
+  const n = A.length;
+  const a = A.map(row => row.slice());
+  for (let sweep = 0; sweep < maxSweeps; sweep++) {
+    let off = 0;
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) off += a[i][j] * a[i][j];
+    if (off < tol) break;
+    for (let p = 0; p < n - 1; p++) {
+      for (let q = p + 1; q < n; q++) {
+        if (Math.abs(a[p][q]) < 1e-15) continue;
+        const theta = (a[q][q] - a[p][p]) / (2 * a[p][q]);
+        const t = Math.sign(theta || 1) / (Math.abs(theta) + Math.sqrt(theta * theta + 1));
+        const c = 1 / Math.sqrt(t * t + 1);
+        const s = t * c;
+        const app = a[p][p], aqq = a[q][q], apq = a[p][q];
+        a[p][p] = c * c * app - 2 * s * c * apq + s * s * aqq;
+        a[q][q] = s * s * app + 2 * s * c * apq + c * c * aqq;
+        a[p][q] = 0; a[q][p] = 0;
+        for (let k = 0; k < n; k++) {
+          if (k === p || k === q) continue;
+          const akp = a[k][p], akq = a[k][q];
+          a[k][p] = c * akp - s * akq; a[p][k] = a[k][p];
+          a[k][q] = s * akp + c * akq; a[q][k] = a[k][q];
+        }
+      }
+    }
+  }
+  const eigs = [];
+  for (let i = 0; i < n; i++) eigs.push(a[i][i]);
+  eigs.sort((x, y) => x - y);
+  return eigs;
+}
+
+function erfc(x) {
+  const z = Math.abs(x);
+  const t = 1 / (1 + 0.5 * z);
+  const ans = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 +
+    t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 +
+    t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+  return x >= 0 ? ans : 2 - ans;
+}
+
+// ============================================================
+// transmon.py port
+// ============================================================
+function transmonFreqAnharm(EJ, EC, ng = 0, nmax = 15) {
+  const dim = 2 * nmax + 1;
+  const H = Array.from({ length: dim }, () => new Array(dim).fill(0));
+  for (let i = 0; i < dim; i++) {
+    const nval = i - nmax;
+    H[i][i] = 4 * EC * (nval - ng) ** 2;
+  }
+  for (let i = 0; i < dim - 1; i++) {
+    H[i][i + 1] = -EJ / 2;
+    H[i + 1][i] = -EJ / 2;
+  }
+  const eig = jacobiEigenvalues(H);
+  const levels = eig.slice(0, 3).map(e => e - eig[0]);
+  const f01 = levels[1] - levels[0];
+  const f12 = levels[2] - levels[1];
+  return { f01_GHz: f01, f12_GHz: f12, anharmonicity_GHz: f12 - f01 };
+}
+
+// ============================================================
+// decoherence.py port
+// ============================================================
+function t1FromQ(f01_GHz, Q) {
+  const f01_Hz = f01_GHz * 1e9;
+  const T1_s = Q / (2 * Math.PI * f01_Hz);
+  return T1_s * 1e6;
+}
+function t2FromT1Dephasing(T1_us, Tphi_us) {
+  const rate = 1 / (2 * T1_us) + 1 / Tphi_us;
+  return 1 / rate;
+}
+function purcellT1(f01_GHz, fr_GHz, g_MHz, Qr) {
+  const omega01 = 2 * Math.PI * f01_GHz * 1e9;
+  const omegaR = 2 * Math.PI * fr_GHz * 1e9;
+  const g = 2 * Math.PI * g_MHz * 1e6;
+  const delta = omega01 - omegaR;
+  const kappa = omegaR / Qr;
+  const gammaP = (g / delta) ** 2 * kappa;
+  const T1_us = (1 / gammaP) * 1e6;
+  const ratio = Math.abs(delta) / g;
+  const warning = ratio < 10
+    ? `|Δ|/g = ${ratio.toFixed(1)} — dispersive regime assumes |Δ| ≫ g (want &gt;~10). This Purcell estimate may be inaccurate.`
+    : null;
+  return { T1_us, warning };
+}
+function combineT1(...vals) {
+  const rate = vals.filter(v => v > 0).reduce((s, v) => s + 1 / v, 0);
+  return 1 / rate;
+}
+
+// ============================================================
+// gate_error.py port
+// ============================================================
+function decoherenceLimitedFidelity(t_gate_ns, T1_us, T2_us) {
+  const t_us = t_gate_ns / 1000;
+  return 0.5 + (1 / 6) * Math.exp(-t_us / T1_us) + (1 / 3) * Math.exp(-t_us / T2_us);
+}
+
+// ============================================================
+// readout_error.py port
+// ============================================================
+function t1DecayReadoutError(T1_us, tro_ns) {
+  return 1 - Math.exp(-(tro_ns / 1000) / T1_us);
+}
+function discriminationError(chi_MHz, kappa_MHz, nbar, tint_ns) {
+  const kappaPerNs = kappa_MHz * 1e6 * 1e-9 * 2 * Math.PI;
+  const chiPerNs = chi_MHz * 1e6 * 1e-9 * 2 * Math.PI;
+  const snr = Math.sqrt(2 * chiPerNs ** 2 * nbar * tint_ns / kappaPerNs);
+  return { p: 0.5 * erfc(snr / 2), snr };
+}
+
+// ============================================================
+// crosstalk_error.py port
+// ============================================================
+function zzRateMHz(alpha1_MHz, alpha2_MHz, J_MHz, detuning_MHz) {
+  const term1 = 1 / (detuning_MHz + alpha1_MHz);
+  const term2 = 1 / (detuning_MHz - alpha2_MHz);
+  return 2 * J_MHz ** 2 * (term1 - term2);
+}
+function crosstalkLimitedFidelity(zeta_MHz, t_gate_ns) {
+  const zetaRadPerNs = zeta_MHz * 1e6 * 1e-9 * 2 * Math.PI;
+  const phase = zetaRadPerNs * t_gate_ns / 2;
+  return 2 / 3 + (1 / 3) * Math.cos(phase);
+}
+
+// ============================================================
+// control_error.py port
+// ============================================================
+function rotationErrorInfidelity(delta_rad) { return (delta_rad ** 2) / 6; }
+function miscalibrationError(theta_rad, ampErrFrac, phaseErrRad) {
+  const ampInf = ampErrFrac ? rotationErrorInfidelity(ampErrFrac * theta_rad) : 0;
+  const phaseInf = phaseErrRad ? rotationErrorInfidelity(phaseErrRad) : 0;
+  return { total: ampInf + phaseInf, fidelity: 1 - (ampInf + phaseInf) };
+}
+
+// ============================================================
+// leakage_error.py port
+// ============================================================
+const DRAG_SUPPRESSION = 20.0;
+function leakageProbability(omega_MHz, alpha_MHz, drag) {
+  let L = (omega_MHz / (4 * alpha_MHz)) ** 2;
+  if (drag) L = L / DRAG_SUPPRESSION;
+  return L;
+}
+
+// ============================================================
+// helpers: read a field, fall back to its placeholder (= default)
+// ============================================================
+function val(id) {
+  const el = document.getElementById(id);
+  const v = el.value.trim();
+  return v === "" ? parseFloat(el.placeholder) : parseFloat(v);
+}
+function fmtPct(x) { return (x * 100).toFixed(4) + "%"; }
+function fidClass(f) { return f >= 0.999 ? "good" : f >= 0.99 ? "mid" : "bad"; }
+function barColor(frac) {
+  if (frac > 0.5) return "#8A6800";
+  if (frac > 0.2) return "#D6A300";
+  return "#E8C84A";
+}
+
+function renderBudget(containerId, contributions) {
+  const total = Object.values(contributions).reduce((s, v) => s + v, 0) || 1;
+  const sorted = Object.entries(contributions).sort((a, b) => b[1] - a[1]);
+  const el = document.getElementById(containerId);
+  el.innerHTML = sorted.map(([name, v]) => {
+    const frac = v / total;
+    return `<div class="budget-row">
+      <span class="name">${name}</span>
+      <span class="budget-track"><span class="budget-fill" style="width:${Math.max(frac*100,1.5)}%; background:${barColor(frac)};"></span></span>
+      <span class="pct">${fmtPct(v)}</span>
+    </div>`;
+  }).join("");
+}
+
+// ============================================================
+// main compute + render
+// ============================================================
+function compute() {
+  const EJ = val("EJ"), EC = val("EC");
+  const freq = transmonFreqAnharm(EJ, EC);
+  document.getElementById("out-f01").textContent = freq.f01_GHz.toFixed(4) + " GHz";
+  document.getElementById("out-anharm").textContent = (freq.anharmonicity_GHz * 1000).toFixed(1) + " MHz";
+
+  // decoherence
+  const Q = val("Q"), Tphi = val("Tphi");
+  const T1_dielectric = t1FromQ(freq.f01_GHz, Q);
+  let T1 = T1_dielectric;
+  const purcellOn = document.getElementById("purcell").checked;
+  document.getElementById("purcell-warning").innerHTML = "";
+  if (purcellOn) {
+    const fr = val("fr"), g = val("g"), Qr = val("Qr");
+    const p = purcellT1(freq.f01_GHz, fr, g, Qr);
+    T1 = combineT1(T1_dielectric, p.T1_us);
+    if (p.warning) document.getElementById("purcell-warning").innerHTML = `<div class="warning">⚠ ${p.warning}</div>`;
+  }
+  const T2 = t2FromT1Dephasing(T1, Tphi);
+  document.getElementById("out-t1t2").textContent = `${T1.toFixed(1)} / ${T2.toFixed(1)} µs`;
+
+  // gate durations
+  const t1q = val("t1q"), t2q = val("t2q");
+
+  // control error
+  const ampErr = val("ampErr") / 100, phaseErr = val("phaseErr") / 1000;
+  const ctrl = miscalibrationError(Math.PI, ampErr, phaseErr);
+
+  // leakage
+  const dragOn = document.getElementById("drag").checked;
+  const alphaMHz = Math.abs(freq.anharmonicity_GHz) * 1000;
+  const omega1qMHz = (Math.PI / t1q) * 1000;
+  const leak = leakageProbability(omega1qMHz, alphaMHz, dragOn);
+
+  // crosstalk
+  const J = val("J"), detuning = val("detuning");
+  const zeta = zzRateMHz(alphaMHz, alphaMHz, J, detuning);
+  const Fxt = crosstalkLimitedFidelity(zeta, t2q);
+
+  // decoherence-limited gate fidelity
+  const Fdec1q = decoherenceLimitedFidelity(t1q, T1, T2);
+  const Fdec2q = decoherenceLimitedFidelity(t2q, T1, T2);
+
+  // combine
+  const F1q = Fdec1q * ctrl.fidelity * (1 - leak);
+  const F2q = Fdec2q * ctrl.fidelity * Fxt;
+
+  document.getElementById("fid-1q").textContent = fmtPct(F1q);
+  document.getElementById("fid-1q").className = "fid " + fidClass(F1q);
+  renderBudget("budget-1q", {
+    "Leakage: ": leak,
+    "Decoherence: ": 1 - Fdec1q,
+    "Control: ": 1 - ctrl.fidelity,
+  });
+
+  document.getElementById("fid-2q").textContent = fmtPct(F2q);
+  document.getElementById("fid-2q").className = "fid " + fidClass(F2q);
+  renderBudget("budget-2q", {
+    "Decoherence: ": 1 - Fdec2q,
+    "Crosstalk: ": 1 - Fxt,
+    "Control: ": 1 - ctrl.fidelity,
+  });
+
+  // readout
+  const tro = val("tro");
+  const pT1 = t1DecayReadoutError(T1, tro);
+  let pDisc = 0;
+  const discOn = document.getElementById("discriminate").checked;
+  if (discOn) {
+    const fr = document.getElementById("fr").value.trim() === "" ? 7.0 : val("fr");
+    const g = document.getElementById("g").value.trim() === "" ? 80 : val("g");
+    const Qr = document.getElementById("Qr").value.trim() === "" ? 15000 : val("Qr");
+    const deltaMHz = (freq.f01_GHz - fr) * 1000;
+    const chiMHz = g ** 2 / deltaMHz;
+    const kappaMHz = (fr * 1000) / Qr;
+    const nbar = val("nbar"), tint = val("tint");
+    const d = discriminationError(chiMHz, kappaMHz, nbar, tint);
+    pDisc = d.p;
+  }
+  const Fro = 1 - (1 - (1 - pT1) * (1 - pDisc));
+  const roError = 1 - (1 - pT1) * (1 - pDisc);
+  document.getElementById("fid-ro").textContent = fmtPct(1 - roError);
+  document.getElementById("fid-ro").className = "fid " + fidClass(1 - roError);
+  const roBudget = { "T1 decay": pT1 };
+  if (discOn) roBudget["discrimination"] = pDisc;
+  renderBudget("budget-ro", roBudget);
+
+  // Store the current results where the circuit simulator can read them.
+  window.CURRENT_ERRORS = {
+    p1q: 1 - F1q,
+    p2q: 1 - F2q,
+    pReadout: roError,
+  };
+}
+
+// ============================================================
+// Circuit engine: minimal QASM 2.0 parser + statevector simulator
+// ============================================================
+function parseQasm(text) {
+  const lines = text.split(";").map(l => l.trim()).filter(l => l.length > 0);
+  let nQubits = 0;
+  const gates = [];
+  const measurements = [];
+
+  for (let raw of lines) {
+    let line = raw.replace(/\/\/.*$/, "").trim();
+    if (line.length === 0) continue;
+    if (line.startsWith("OPENQASM") || line.startsWith("include")) continue;
+
+    let m = line.match(/^qreg\s+\w+\[(\d+)\]/);
+    if (m) { nQubits = parseInt(m[1]); continue; }
+
+    m = line.match(/^creg\s+\w+\[(\d+)\]/);
+    if (m) continue;
+
+    m = line.match(/^measure\s+\w+\[(\d+)\]\s*->\s*\w+\[(\d+)\]/);
+    if (m) { measurements.push({ qubit: parseInt(m[1]), cbit: parseInt(m[2]) }); continue; }
+
+    m = line.match(/^(\w+)\(([^)]+)\)\s+\w+\[(\d+)\]/);
+    if (m) { gates.push({ name: m[1], params: [parseFloat(m[2])], qubits: [parseInt(m[3])] }); continue; }
+
+    m = line.match(/^(\w+)\s+\w+\[(\d+)\]\s*,\s*\w+\[(\d+)\]/);
+    if (m) { gates.push({ name: m[1], params: [], qubits: [parseInt(m[2]), parseInt(m[3])] }); continue; }
+
+    m = line.match(/^(\w+)\s+\w+\[(\d+)\]/);
+    if (m) { gates.push({ name: m[1], params: [], qubits: [parseInt(m[2])] }); continue; }
+  }
+
+  if (measurements.length === 0) {
+    for (let i = 0; i < nQubits; i++) measurements.push({ qubit: i, cbit: i });
+  }
+  return { nQubits, gates, measurements };
+}
+
+function newState(n) {
+  const dim = 1 << n;
+  const re = new Float64Array(dim);
+  const im = new Float64Array(dim);
+  re[0] = 1.0;
+  return { re, im, n };
+}
+
+function applySingleQubitGate(state, qubit, matrix) {
+  const { re, im, n } = state;
+  const dim = 1 << n;
+  const bit = 1 << qubit;
+  for (let i = 0; i < dim; i++) {
+    if ((i & bit) !== 0) continue;
+    const j = i | bit;
+    const a0re = re[i], a0im = im[i];
+    const a1re = re[j], a1im = im[j];
+    const [[a, b], [c, d]] = matrix;
+    re[i] = a.re * a0re - a.im * a0im + b.re * a1re - b.im * a1im;
+    im[i] = a.re * a0im + a.im * a0re + b.re * a1im + b.im * a1re;
+    re[j] = c.re * a0re - c.im * a0im + d.re * a1re - d.im * a1im;
+    im[j] = c.re * a0im + c.im * a0re + d.re * a1im + d.im * a1re;
+  }
+}
+
+function applyCX(state, control, target) {
+  const { re, im, n } = state;
+  const dim = 1 << n;
+  const cBit = 1 << control, tBit = 1 << target;
+  for (let i = 0; i < dim; i++) {
+    if ((i & cBit) === 0) continue;
+    if ((i & tBit) !== 0) continue;
+    const j = i | tBit;
+    [re[i], re[j]] = [re[j], re[i]];
+    [im[i], im[j]] = [im[j], im[i]];
+  }
+}
+
+const Cx = (re, im = 0) => ({ re, im });
+const QGATES = {
+  h: [[Cx(1 / Math.SQRT2), Cx(1 / Math.SQRT2)], [Cx(1 / Math.SQRT2), Cx(-1 / Math.SQRT2)]],
+  x: [[Cx(0), Cx(1)], [Cx(1), Cx(0)]],
+  y: [[Cx(0), Cx(0, -1)], [Cx(0, 1), Cx(0)]],
+  z: [[Cx(1), Cx(0)], [Cx(0), Cx(-1)]],
+  s: [[Cx(1), Cx(0)], [Cx(0), Cx(0, 1)]],
+  sdg: [[Cx(1), Cx(0)], [Cx(0), Cx(0, -1)]],
+  t: [[Cx(1), Cx(0)], [Cx(0), Cx(Math.cos(Math.PI / 4), Math.sin(Math.PI / 4))]],
+  tdg: [[Cx(1), Cx(0)], [Cx(0), Cx(Math.cos(-Math.PI / 4), Math.sin(-Math.PI / 4))]],
+};
+function rxMatrix(theta) {
+  const c = Math.cos(theta / 2), s = Math.sin(theta / 2);
+  return [[Cx(c), Cx(0, -s)], [Cx(0, -s), Cx(c)]];
+}
+function ryMatrix(theta) {
+  const c = Math.cos(theta / 2), s = Math.sin(theta / 2);
+  return [[Cx(c), Cx(-s)], [Cx(s), Cx(c)]];
+}
+function rzMatrix(theta) {
+  return [[Cx(Math.cos(-theta / 2), Math.sin(-theta / 2)), Cx(0)], [Cx(0), Cx(Math.cos(theta / 2), Math.sin(theta / 2))]];
+}
+function applyGate(state, gate) {
+  const name = gate.name;
+  if (name === "cx") { applyCX(state, gate.qubits[0], gate.qubits[1]); return; }
+  if (name === "rx") { applySingleQubitGate(state, gate.qubits[0], rxMatrix(gate.params[0])); return; }
+  if (name === "ry") { applySingleQubitGate(state, gate.qubits[0], ryMatrix(gate.params[0])); return; }
+  if (name === "rz") { applySingleQubitGate(state, gate.qubits[0], rzMatrix(gate.params[0])); return; }
+  if (QGATES[name]) { applySingleQubitGate(state, gate.qubits[0], QGATES[name]); return; }
+  throw new Error("Unknown gate in QASM: " + name);
+}
+function stateProbabilities(state) {
+  const dim = 1 << state.n;
+  const probs = new Float64Array(dim);
+  for (let i = 0; i < dim; i++) probs[i] = state.re[i] ** 2 + state.im[i] ** 2;
+  return probs;
+}
+function bitstring(i, n) {
+  let s = "";
+  for (let q = n - 1; q >= 0; q--) s += (i >> q) & 1;
+  return s;
+}
+
+function maybeApplyError(state, qubits, pError) {
+  if (Math.random() >= pError) return;
+  for (const q of qubits) {
+    const r = Math.random();
+    if (r < 1 / 3) applySingleQubitGate(state, q, QGATES.x);
+    else if (r < 2 / 3) applySingleQubitGate(state, q, QGATES.y);
+    else applySingleQubitGate(state, q, QGATES.z);
+  }
+}
+
+function sampleOutcome(probs, measurements, pReadout) {
+  const r = Math.random();
+  let cum = 0, chosen = 0;
+  for (let i = 0; i < probs.length; i++) { cum += probs[i]; if (r < cum) { chosen = i; break; } }
+  const nCbits = measurements.length;
+  const bits = new Array(nCbits).fill("0");
+  for (const m of measurements) {
+    let bit = (chosen >> m.qubit) & 1;
+    if (pReadout && Math.random() < pReadout) bit = 1 - bit;
+    bits[m.cbit] = String(bit);
+  }
+  return bits.reverse().join("");
+}
+
+function runIdealCircuit(parsed, shots) {
+  const state = newState(parsed.nQubits);
+  for (const g of parsed.gates) applyGate(state, g);
+  const probs = stateProbabilities(state);
+  const counts = {};
+  for (let shot = 0; shot < shots; shot++) {
+    const key = sampleOutcome(probs, parsed.measurements, 0);
+    counts[key] = (counts[key] || 0) + 1;
+  }
+  return counts;
+}
+
+function runNoisyCircuit(parsed, p1q, p2q, pReadout, shots) {
+  const counts = {};
+  for (let shot = 0; shot < shots; shot++) {
+    const state = newState(parsed.nQubits);
+    for (const g of parsed.gates) {
+      applyGate(state, g);
+      if (g.qubits.length === 1) maybeApplyError(state, g.qubits, p1q);
+      else maybeApplyError(state, g.qubits, p2q);
+    }
+    const probs = stateProbabilities(state);
+    const key = sampleOutcome(probs, parsed.measurements, pReadout);
+    counts[key] = (counts[key] || 0) + 1;
+  }
+  return counts;
+}
+
+function hellingerFidelity(idealCounts, noisyCounts, shots) {
+  const keys = new Set([...Object.keys(idealCounts), ...Object.keys(noisyCounts)]);
+  let bc = 0;
+  for (const k of keys) {
+    const p = (idealCounts[k] || 0) / shots;
+    const q = (noisyCounts[k] || 0) / shots;
+    bc += Math.sqrt(p * q);
+  }
+  return bc * bc;
+}
+
+function renderCountsBars(containerId, counts, shots) {
+  const el = document.getElementById(containerId);
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const maxCount = sorted.length ? sorted[0][1] : 1;
+  el.innerHTML = sorted.map(([key, count]) => {
+    const pct = (count / shots) * 100;
+    const widthPct = (count / maxCount) * 100;
+    return `<div class="budget-row">
+      <span class="name">${key}</span>
+      <span class="budget-track"><span class="budget-fill" style="width:${widthPct}%; background:#D6A300;"></span></span>
+      <span class="pct">${pct.toFixed(1)}%</span>
+    </div>`;
+  }).join("");
+}
+
+function runCircuitFromUI() {
+  const text = document.getElementById("qasmInput").value;
+  const shots = parseInt(document.getElementById("shots").value) || 2000;
+  const statusEl = document.getElementById("circuit-status");
+
+  let parsed;
+  try {
+    parsed = parseQasm(text);
+    if (parsed.nQubits === 0) throw new Error("No qreg found");
+    if (parsed.nQubits > 12) throw new Error("Keep it to 12 qubits or fewer for browser performance");
+  } catch (e) {
+    statusEl.textContent = "Parse error: " + e.message;
+    statusEl.style.color = "#8A6800";
+    return;
+  }
+
+  const errors = window.CURRENT_ERRORS || { p1q: 0, p2q: 0, pReadout: 0 };
+
+  const ideal = runIdealCircuit(parsed, shots);
+  const noisy = runNoisyCircuit(parsed, errors.p1q, errors.p2q, errors.pReadout, shots);
+  const fidelity = hellingerFidelity(ideal, noisy, shots);
+
+  statusEl.textContent = `${parsed.nQubits} qubits, ${parsed.gates.length} gates — ` +
+    `using 1Q error ${(errors.p1q*100).toFixed(4)}%, 2Q error ${(errors.p2q*100).toFixed(4)}%, ` +
+    `readout error ${(errors.pReadout*100).toFixed(4)}% from the panels above`;
+  statusEl.style.color = "";
+
+  document.getElementById("hellinger-fidelity").textContent = (fidelity * 100).toFixed(2) + "%";
+  renderCountsBars("ideal-counts", ideal, shots);
+  renderCountsBars("noisy-counts", noisy, shots);
+}
+
+// ============================================================
+// wiring
+// ============================================================
+document.querySelectorAll("#inputs input").forEach(el => el.addEventListener("input", compute));
+
+document.getElementById("purcell").addEventListener("change", (e) => {
+  document.getElementById("purcell-fields").style.display = e.target.checked ? "block" : "none";
+  compute();
+});
+document.getElementById("discriminate").addEventListener("change", (e) => {
+  document.getElementById("disc-fields").style.display = e.target.checked ? "block" : "none";
+  compute();
+});
+
+document.querySelectorAll(".accordion").forEach(h => {
+  h.addEventListener("click", () => {
+    const body = document.getElementById(h.dataset.target);
+    body.classList.toggle("collapsed");
+    h.classList.toggle("collapsed");
+  });
+});
+
+document.getElementById("runCircuitBtn").addEventListener("click", runCircuitFromUI);
+
+compute();
+</script>
+</body>
+</html>

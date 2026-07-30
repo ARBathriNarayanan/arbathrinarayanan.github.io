@@ -88,6 +88,11 @@ ninja.data = [{
           description: "Done with Khushi Raghavendra (IISER TVM) and Spoorthi Syamaprasad (IISER Kolkata)",
           section: "Projects",handler: () => {
               window.location.href = "/projects/5_project/";
+            },},{id: "projects-hardware-noise-console",
+          title: 'Hardware noise console',
+          description: "Provides theoretical noise calculation for a given circuit. Done as part of the 30 Day challenge.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/6_project/";
             },},{
         id: 'social-cv',
         title: 'CV',
