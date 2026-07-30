@@ -4,7 +4,7 @@ title: Exploring Superconducting Quantum Circuits
 description: Done in IISc Bengaluru
 img: assets/img/projects/sqd.jpg
 importance: 1
-category: work
+category: Academic
 related_publications: false
 ---
 

@@ -4,7 +4,7 @@ title: Superconducting Qubits and Analogue Gravity
 description: Done in CEBS Mumbai
 img: assets/img/projects/sqag.png
 importance: 3
-category: work
+category: Academic
 related_publications: false
 ---
 

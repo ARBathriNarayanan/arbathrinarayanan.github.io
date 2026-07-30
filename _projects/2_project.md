@@ -4,7 +4,7 @@ title: The Current Mirror Qubit
 description: Done in CEBS Mumbai
 img: assets/img/projects/cmq.png
 importance: 2
-category: work
+category: Academic
 related_publications: false
 ---
 

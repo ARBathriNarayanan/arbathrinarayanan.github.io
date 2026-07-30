@@ -4,7 +4,7 @@ title: Aspects of Quantum Carnot Engine
 description: Done in HRI Prayagraj under Indian Academy of Sciences-Summer Research Fellowship Program
 img: assets/img/projects/carnot.png
 importance: 4
-category: work
+category: Academic
 related_publications: false
 ---
 
