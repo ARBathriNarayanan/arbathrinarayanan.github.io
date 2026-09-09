@@ -37,7 +37,18 @@ ninja.data = [{
               handler: () => {
                 window.location.href = "/books/";
               },
-            },{id: "post-the-gopuram",
+            },{id: "post-issue-06-heirlooms",
+        
+          title: 'Issue 06: Heirlooms <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "​What do we inherit? What do we refuse? The spice box in your kitchen cabinet, a lullaby in your mother tongue, old foxing letters from an address you can never return to. Gold as dignity, silk as remembrance and brass as ritual. A word, a phrase, a prayer.",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://zhagaramlit.gumroad.com/l/issue06?utm_source=ig&utm_medium=social&utm_content=link_in_bio&utm_id=97760_v0_s00_e0_tv3", "_blank");
+          
+        },
+      },{id: "post-the-gopuram",
         
           title: "The Gopuram",
         
