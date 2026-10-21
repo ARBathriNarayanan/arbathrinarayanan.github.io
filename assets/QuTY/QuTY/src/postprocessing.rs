@@ -68,9 +68,18 @@ pub struct QECCodeConfig {
 impl Default for QECCodeConfig {
     fn default() -> Self {
         let default_rules = vec![
-            CustomSyndromeRule { syndrome_bits: "10".to_string(), flip_qubit_idx: 0 },
-            CustomSyndromeRule { syndrome_bits: "11".to_string(), flip_qubit_idx: 1 },
-            CustomSyndromeRule { syndrome_bits: "01".to_string(), flip_qubit_idx: 2 },
+            CustomSyndromeRule {
+                syndrome_bits: "10".to_string(),
+                flip_qubit_idx: 0,
+            },
+            CustomSyndromeRule {
+                syndrome_bits: "11".to_string(),
+                flip_qubit_idx: 1,
+            },
+            CustomSyndromeRule {
+                syndrome_bits: "01".to_string(),
+                flip_qubit_idx: 2,
+            },
         ];
 
         Self {
@@ -157,7 +166,10 @@ impl Postprocessor {
                         continue;
                     }
 
-                    let bits: Vec<u8> = bitstring.chars().map(|c| if c == '1' { 1 } else { 0 }).collect();
+                    let bits: Vec<u8> = bitstring
+                        .chars()
+                        .map(|c| if c == '1' { 1 } else { 0 })
+                        .collect();
                     let (s1, s2) = (bits[0] ^ bits[1], bits[1] ^ bits[2]);
                     let syndrome_str = format!("{}{}", s1, s2);
                     *syndrome_histogram.entry(syndrome_str.clone()).or_insert(0) += count;
@@ -180,7 +192,9 @@ impl Postprocessor {
                             }
                         } else {
                             for rule in &config.custom_rules {
-                                if rule.syndrome_bits == syndrome_str && rule.flip_qubit_idx < corrected_bits.len() {
+                                if rule.syndrome_bits == syndrome_str
+                                    && rule.flip_qubit_idx < corrected_bits.len()
+                                {
                                     corrected_bits[rule.flip_qubit_idx] ^= 1;
                                     break;
                                 }
@@ -189,7 +203,10 @@ impl Postprocessor {
                     }
 
                     retained_shots += count;
-                    let corr_str: String = corrected_bits.iter().map(|b| if *b == 1 { '1' } else { '0' }).collect();
+                    let corr_str: String = corrected_bits
+                        .iter()
+                        .map(|b| if *b == 1 { '1' } else { '0' })
+                        .collect();
                     *corrected_physical.entry(corr_str.clone()).or_insert(0) += count;
 
                     let logical_bit = if corr_str == "111" { "1" } else { "0" };
@@ -207,7 +224,10 @@ impl Postprocessor {
                         continue;
                     }
 
-                    let bits: Vec<u8> = bitstring.chars().map(|c| if c == '1' { 1 } else { 0 }).collect();
+                    let bits: Vec<u8> = bitstring
+                        .chars()
+                        .map(|c| if c == '1' { 1 } else { 0 })
+                        .collect();
                     let parity = (bits[0] + bits[1] + bits[2] + bits[3]) % 2;
                     let syndrome_str = format!("P{}", parity);
                     *syndrome_histogram.entry(syndrome_str.clone()).or_insert(0) += count;
@@ -223,7 +243,9 @@ impl Postprocessor {
                     if config.decode_mode == DecodeMode::ActiveSyndromeCorrection {
                         if !config.enable_auto_majority_vote {
                             for rule in &config.custom_rules {
-                                if rule.syndrome_bits == syndrome_str && rule.flip_qubit_idx < corrected_bits.len() {
+                                if rule.syndrome_bits == syndrome_str
+                                    && rule.flip_qubit_idx < corrected_bits.len()
+                                {
                                     corrected_bits[rule.flip_qubit_idx] ^= 1;
                                     break;
                                 }
@@ -232,7 +254,10 @@ impl Postprocessor {
                     }
 
                     retained_shots += count;
-                    let corr_str: String = corrected_bits.iter().map(|b| if *b == 1 { '1' } else { '0' }).collect();
+                    let corr_str: String = corrected_bits
+                        .iter()
+                        .map(|b| if *b == 1 { '1' } else { '0' })
+                        .collect();
                     *corrected_physical.entry(corr_str.clone()).or_insert(0) += count;
 
                     let logical_state = match corr_str.as_str() {
@@ -246,17 +271,28 @@ impl Postprocessor {
                 }
 
                 _ => {
-                    let mut corrected_bits: Vec<u8> = bitstring.chars().map(|c| if c == '1' { 1 } else { 0 }).collect();
+                    let mut corrected_bits: Vec<u8> = bitstring
+                        .chars()
+                        .map(|c| if c == '1' { 1 } else { 0 })
+                        .collect();
                     let syndrome_str = if corrected_bits.len() >= 2 {
-                        format!("{}{}", corrected_bits[0] ^ corrected_bits[1], corrected_bits[1] ^ corrected_bits.last().copied().unwrap_or(0))
+                        format!(
+                            "{}{}",
+                            corrected_bits[0] ^ corrected_bits[1],
+                            corrected_bits[1] ^ corrected_bits.last().copied().unwrap_or(0)
+                        )
                     } else {
                         "0".to_string()
                     };
                     *syndrome_histogram.entry(syndrome_str.clone()).or_insert(0) += count;
 
-                    if config.decode_mode == DecodeMode::ActiveSyndromeCorrection && !config.enable_auto_majority_vote {
+                    if config.decode_mode == DecodeMode::ActiveSyndromeCorrection
+                        && !config.enable_auto_majority_vote
+                    {
                         for rule in &config.custom_rules {
-                            if rule.syndrome_bits == syndrome_str && rule.flip_qubit_idx < corrected_bits.len() {
+                            if rule.syndrome_bits == syndrome_str
+                                && rule.flip_qubit_idx < corrected_bits.len()
+                            {
                                 corrected_bits[rule.flip_qubit_idx] ^= 1;
                                 break;
                             }
@@ -264,7 +300,10 @@ impl Postprocessor {
                     }
 
                     retained_shots += count;
-                    let corr_str: String = corrected_bits.iter().map(|b| if *b == 1 { '1' } else { '0' }).collect();
+                    let corr_str: String = corrected_bits
+                        .iter()
+                        .map(|b| if *b == 1 { '1' } else { '0' })
+                        .collect();
                     *corrected_physical.entry(corr_str.clone()).or_insert(0) += count;
                     let logical_str = corr_str.chars().next().unwrap_or('0').to_string();
                     *logical_counts.entry(logical_str).or_insert(0) += count;
@@ -304,7 +343,11 @@ impl Postprocessor {
         let n = scale_factors.len() as f64;
         let sum_x: f64 = scale_factors.iter().sum();
         let sum_y: f64 = values.iter().sum();
-        let sum_xy: f64 = scale_factors.iter().zip(values.iter()).map(|(x, y)| x * y).sum();
+        let sum_xy: f64 = scale_factors
+            .iter()
+            .zip(values.iter())
+            .map(|(x, y)| x * y)
+            .sum();
         let sum_x2: f64 = scale_factors.iter().map(|x| x * x).sum();
 
         let denom = n * sum_x2 - sum_x * sum_x;
@@ -339,7 +382,11 @@ print("Retained Shots :", retained)
 print("Discarded Shots:", discarded)
 "#,
             config.preset.name(),
-            if config.decode_mode == DecodeMode::ActiveSyndromeCorrection { "Active Correction" } else { "Post-Selection" },
+            if config.decode_mode == DecodeMode::ActiveSyndromeCorrection {
+                "Active Correction"
+            } else {
+                "Post-Selection"
+            },
             config.preset.physical_qubits()
         )
     }

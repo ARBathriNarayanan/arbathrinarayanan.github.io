@@ -15,8 +15,11 @@ pub struct EmitterErrorEstimator;
 impl EmitterErrorEstimator {
     pub fn calculate_purcell_factor(spec: &PurcellCavitySpec) -> f64 {
         let n = 3.45; // Silicon refractive index
-        let f_max = (3.0 / (4.0 * std::f64::consts::PI * std::f64::consts::PI)) * (spec.cavity_q / spec.mode_volume_lambda3) * (1.0 / (n * n * n));
-        let lorentzian = 1.0 / (1.0 + 4.0 * (spec.detuning_ghz / spec.cavity_loss_kappa_ghz).powi(2));
+        let f_max = (3.0 / (4.0 * std::f64::consts::PI * std::f64::consts::PI))
+            * (spec.cavity_q / spec.mode_volume_lambda3)
+            * (1.0 / (n * n * n));
+        let lorentzian =
+            1.0 / (1.0 + 4.0 * (spec.detuning_ghz / spec.cavity_loss_kappa_ghz).powi(2));
         f_max * lorentzian * spec.defect.zpl_fraction()
     }
 
@@ -39,4 +42,3 @@ impl EmitterErrorEstimator {
         points
     }
 }
-

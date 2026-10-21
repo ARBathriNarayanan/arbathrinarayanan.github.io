@@ -4,7 +4,7 @@
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result<()> {
     let native_options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default()
+        viewport: eframe::egui::ViewportBuilder::default()
             .with_inner_size([1180.0, 760.0])
             .with_min_inner_size([740.0, 480.0])
             .with_title("QuTY - Quantum Hardware & QEC Console"),
@@ -21,4 +21,3 @@ fn main() -> eframe::Result<()> {
 // WebAssembly fallback (Browser entry point runs from src/lib.rs)
 #[cfg(target_arch = "wasm32")]
 fn main() {}
-

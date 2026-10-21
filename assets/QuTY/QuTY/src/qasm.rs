@@ -148,21 +148,27 @@ impl QasmProgram {
         let mut n_2q = 0;
         for inst in &self.instructions {
             let cl = inst.trim();
-            if cl.starts_with("cx ") || cl.starts_with("cnot ") || cl.starts_with("cz ") || cl.swap_check() {
+            if cl.starts_with("cx ")
+                || cl.starts_with("cnot ")
+                || cl.starts_with("cz ")
+                || cl.swap_check()
+            {
                 n_2q += 1;
             } else if !cl.starts_with("measure ") {
                 n_1q += 1;
             }
         }
 
-        let t_total_s = (n_1q as f64 * spec.gate_time_1q_us + n_2q as f64 * spec.gate_time_2q_us) * 1e-6;
+        let t_total_s =
+            (n_1q as f64 * spec.gate_time_1q_us + n_2q as f64 * spec.gate_time_2q_us) * 1e-6;
         let dephasing_err = (t_total_s / spec.t2_s).clamp(0.0, 0.40);
 
         let t_2q_s = (n_2q as f64 * spec.gate_time_2q_us) * 1e-6;
         let delta_n = spec.heating_rate_quanta_s * t_2q_s;
         let motional_err = (delta_n * 0.08).clamp(0.0, 0.30);
 
-        let scatter_err = ((n_1q as f64 + 2.0 * n_2q as f64) * spec.raman_scattering_prob).clamp(0.0, 0.20);
+        let scatter_err =
+            ((n_1q as f64 + 2.0 * n_2q as f64) * spec.raman_scattering_prob).clamp(0.0, 0.20);
         let total_ion_err = (dephasing_err + motional_err + scatter_err).clamp(0.0005, 0.45);
 
         let mut cum_probs = Vec::with_capacity(dim);
@@ -355,8 +361,14 @@ impl QasmProgram {
                 denom.parse::<f64>().map(|d| -pi / d).unwrap_or(-pi)
             } else if s.contains("*pi/") {
                 let parts: Vec<&str> = s.split("*pi/").collect();
-                let num = parts.get(0).and_then(|v| v.parse::<f64>().ok()).unwrap_or(1.0);
-                let den = parts.get(1).and_then(|v| v.parse::<f64>().ok()).unwrap_or(1.0);
+                let num = parts
+                    .get(0)
+                    .and_then(|v| v.parse::<f64>().ok())
+                    .unwrap_or(1.0);
+                let den = parts
+                    .get(1)
+                    .and_then(|v| v.parse::<f64>().ok())
+                    .unwrap_or(1.0);
                 (num * pi) / den
             } else if s.contains("*pi") {
                 s.replace("*pi", "").parse::<f64>().unwrap_or(1.0) * pi
