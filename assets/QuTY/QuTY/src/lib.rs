@@ -32,5 +32,3 @@ pub fn start() -> Result<(), JsValue> {
 
     Ok(())
 }
-
-

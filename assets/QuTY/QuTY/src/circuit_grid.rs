@@ -124,7 +124,11 @@ impl CircuitGrid {
                     grid[q][3].gate = Some(GateType::Measure);
                 }
 
-                Self { num_qubits, num_steps, grid }
+                Self {
+                    num_qubits,
+                    num_steps,
+                    grid,
+                }
             }
             AlgorithmPreset::BellState => {
                 let num_qubits = 2;
@@ -139,7 +143,11 @@ impl CircuitGrid {
                 grid[0][2].gate = Some(GateType::Measure);
                 grid[1][2].gate = Some(GateType::Measure);
 
-                Self { num_qubits, num_steps, grid }
+                Self {
+                    num_qubits,
+                    num_steps,
+                    grid,
+                }
             }
             AlgorithmPreset::Grover2Qubit => {
                 let num_qubits = 2;
@@ -174,7 +182,11 @@ impl CircuitGrid {
                 grid[0][7].gate = Some(GateType::Measure);
                 grid[1][7].gate = Some(GateType::Measure);
 
-                Self { num_qubits, num_steps, grid }
+                Self {
+                    num_qubits,
+                    num_steps,
+                    grid,
+                }
             }
             AlgorithmPreset::DeutschJozsaBalanced => {
                 let num_qubits = 2;
@@ -199,7 +211,11 @@ impl CircuitGrid {
                 grid[0][4].gate = Some(GateType::Measure);
                 grid[1][4].gate = Some(GateType::Measure);
 
-                Self { num_qubits, num_steps, grid }
+                Self {
+                    num_qubits,
+                    num_steps,
+                    grid,
+                }
             }
             AlgorithmPreset::QuantumTeleportation => {
                 let num_qubits = 3;
@@ -225,7 +241,11 @@ impl CircuitGrid {
                     grid[q][5].gate = Some(GateType::Measure);
                 }
 
-                Self { num_qubits, num_steps, grid }
+                Self {
+                    num_qubits,
+                    num_steps,
+                    grid,
+                }
             }
         }
     }
@@ -281,25 +301,36 @@ impl CircuitGrid {
                             qasm.push_str(&format!("rz({:.4}) q[{}];\n", th, q));
                         }
                         GateType::Cnot => {
-                            let mut ctrl = cell.control_qubit.unwrap_or(if q > 0 { q - 1 } else { 1 });
+                            let mut ctrl =
+                                cell.control_qubit.unwrap_or(if q > 0 { q - 1 } else { 1 });
                             if ctrl >= self.num_qubits || ctrl == q {
-                                ctrl = if q > 0 { 0 } else { 1.min(self.num_qubits.saturating_sub(1)) };
+                                ctrl = if q > 0 {
+                                    0
+                                } else {
+                                    1.min(self.num_qubits.saturating_sub(1))
+                                };
                             }
                             if ctrl != q {
                                 qasm.push_str(&format!("cx q[{}],q[{}];\n", ctrl, q));
                             }
                         }
                         GateType::Cz => {
-                            let mut ctrl = cell.control_qubit.unwrap_or(if q > 0 { q - 1 } else { 1 });
+                            let mut ctrl =
+                                cell.control_qubit.unwrap_or(if q > 0 { q - 1 } else { 1 });
                             if ctrl >= self.num_qubits || ctrl == q {
-                                ctrl = if q > 0 { 0 } else { 1.min(self.num_qubits.saturating_sub(1)) };
+                                ctrl = if q > 0 {
+                                    0
+                                } else {
+                                    1.min(self.num_qubits.saturating_sub(1))
+                                };
                             }
                             if ctrl != q {
                                 qasm.push_str(&format!("cz q[{}],q[{}];\n", ctrl, q));
                             }
                         }
                         GateType::Swap => {
-                            let partner = cell.control_qubit.unwrap_or(if q > 0 { q - 1 } else { 1 });
+                            let partner =
+                                cell.control_qubit.unwrap_or(if q > 0 { q - 1 } else { 1 });
                             if partner < self.num_qubits && q < partner {
                                 qasm.push_str(&format!("swap q[{}],q[{}];\n", q, partner));
                             }
@@ -368,7 +399,11 @@ impl CircuitGrid {
             }
 
             let mut is_rot = false;
-            for (prefix, gate) in [("rx(", GateType::Rx), ("ry(", GateType::Ry), ("rz(", GateType::Rz)] {
+            for (prefix, gate) in [
+                ("rx(", GateType::Rx),
+                ("ry(", GateType::Ry),
+                ("rz(", GateType::Rz),
+            ] {
                 if line.starts_with(prefix) {
                     if let Some((angle, q)) = Self::parse_rot_gate(line, prefix) {
                         if q < num_qubits {
@@ -401,14 +436,29 @@ impl CircuitGrid {
             if let Some((gate, rem)) = two_q {
                 let parts: Vec<&str> = rem.split(',').collect();
                 if parts.len() == 2 {
-                    if let (Some(a), Some(b)) = (Self::parse_qubit_idx(parts[0]), Self::parse_qubit_idx(parts[1])) {
+                    if let (Some(a), Some(b)) = (
+                        Self::parse_qubit_idx(parts[0]),
+                        Self::parse_qubit_idx(parts[1]),
+                    ) {
                         if a < num_qubits && b < num_qubits && a != b {
                             let st = qubit_timeline[a].max(qubit_timeline[b]).min(num_steps - 1);
                             if gate == GateType::Swap {
-                                grid[a][st] = GridCell { gate: Some(GateType::Swap), control_qubit: Some(b), param: None };
-                                grid[b][st] = GridCell { gate: Some(GateType::Swap), control_qubit: Some(a), param: None };
+                                grid[a][st] = GridCell {
+                                    gate: Some(GateType::Swap),
+                                    control_qubit: Some(b),
+                                    param: None,
+                                };
+                                grid[b][st] = GridCell {
+                                    gate: Some(GateType::Swap),
+                                    control_qubit: Some(a),
+                                    param: None,
+                                };
                             } else {
-                                grid[b][st] = GridCell { gate: Some(gate), control_qubit: Some(a), param: None };
+                                grid[b][st] = GridCell {
+                                    gate: Some(gate),
+                                    control_qubit: Some(a),
+                                    param: None,
+                                };
                             }
                             qubit_timeline[a] = (st + 1).min(num_steps);
                             qubit_timeline[b] = (st + 1).min(num_steps);
@@ -447,8 +497,14 @@ impl CircuitGrid {
                 denom.parse::<f64>().map(|d| -pi / d).unwrap_or(-pi)
             } else if s.contains("*pi/") {
                 let parts: Vec<&str> = s.split("*pi/").collect();
-                let num = parts.get(0).and_then(|v| v.parse::<f64>().ok()).unwrap_or(1.0);
-                let den = parts.get(1).and_then(|v| v.parse::<f64>().ok()).unwrap_or(1.0);
+                let num = parts
+                    .get(0)
+                    .and_then(|v| v.parse::<f64>().ok())
+                    .unwrap_or(1.0);
+                let den = parts
+                    .get(1)
+                    .and_then(|v| v.parse::<f64>().ok())
+                    .unwrap_or(1.0);
                 (num * pi) / den
             } else if s.contains("*pi") {
                 s.replace("*pi", "").parse::<f64>().unwrap_or(1.0) * pi

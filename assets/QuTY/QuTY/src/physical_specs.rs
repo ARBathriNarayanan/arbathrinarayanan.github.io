@@ -95,7 +95,7 @@ pub struct PhysicalIonTrapSpec {
     pub secular_freq_radial_mhz: f64,
     pub heating_rate_quanta_s: f64, // \dot{\bar{n}} motional heating
     pub gate_time_1q_us: f64,
-    pub gate_time_2q_us: f64,       // Mølmer-Sørensen gate
+    pub gate_time_2q_us: f64, // Mølmer-Sørensen gate
     pub raman_scattering_prob: f64,
     pub readout_p01: f64,
     pub readout_p10: f64,
