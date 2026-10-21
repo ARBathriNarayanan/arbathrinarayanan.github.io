@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuTY Console</title>
+    <style>
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #11141c;
+        }
+        #the_canvas_id {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+    
+<script type="module">
+import init, * as bindings from '/assets/quty/quty-abbd03765415d99.js';
+const wasm = await init({ module_or_path: '/assets/quty/quty-377d27f3880c9631_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+<link rel="modulepreload" href="/assets/quty/quty-abbd03765415d99.js" crossorigin="anonymous" integrity="sha384-mFoIu2b6s/zbwEtaqwkOi2/VOUEgCq7X+jdkIrDT/UR2iJPTldNwWRy2bG0uHYd7"><link rel="preload" href="/assets/quty/quty-377d27f3880c9631_bg.wasm" crossorigin="anonymous" integrity="sha384-idPXCstx9q41d+j7CZkWR1BhPR1OimI3PgtGVKjqNqrwbmOvxrevIp4QDncAZABe" as="fetch" type="application/wasm"></head>
+<body>
+    <canvas id="the_canvas_id"></canvas>
+</body>
+</html>
+
