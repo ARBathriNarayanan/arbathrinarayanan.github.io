@@ -25,7 +25,7 @@ ninja.data = [{
           },
         },{id: "nav-quty",
           title: "QuTY",
-          description: "Interactive Multi-Platform Quantum Hardware &amp; QEC Console",
+          description: "Interactive Multi-Platform Quantum Hardware, Quantum Circuit &amp; QEC Application",
           section: "Navigation",
           handler: () => {
             window.location.href = "/quty/";
