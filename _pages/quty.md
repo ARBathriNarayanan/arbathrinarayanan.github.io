@@ -4,13 +4,18 @@ title: QuTY
 permalink: /quty/
 nav: true
 nav_order: 3
-description: Interactive Multi-Platform Quantum Hardware & QEC Console
+description: Interactive Multi-Platform Quantum Hardware, Quantum Circuit & QEC Application
 ---
 
 <style>
 .quty-container {
-  width: 100%;
-  height: 80vh;
+  width: calc(100% + 256rem);
+  max-width: none;
+  margin-left: -128rem;
+  height: 92vh;
+  height: 92dvh;
+  min-height: 680px;
+  max-height: 1200px;
   border-radius: 8px;
   border: 1px solid var(--global-divider-color, rgba(255, 255, 255, 0.15));
   overflow: hidden;
@@ -24,10 +29,20 @@ description: Interactive Multi-Platform Quantum Hardware & QEC Console
   border: none;
   display: block;
 }
+
+@media (max-width: 768px) {
+  .quty-container {
+    height: 85vh;
+    height: 85dvh;
+    min-height: 600px;
+    max-height: none;
+    border-radius: 6px;
+  }
+}
 </style>
 
 <p>
-  <strong>QuTY</strong> is an interactive multi-platform quantum hardware simulator and QEC console running 100% client-side via WebAssembly. It models <strong>Superconducting Transmons</strong>, <strong>Trapped Ions (IonQ Aria-1)</strong>, <strong>Telecom Silicon Emitters</strong>, and <strong>Stabilizer QEC Decoders</strong> in real time.
+  <strong>QuTY</strong> is an interactive multi-platform quantum hardware simulator and QEC console. It models <strong>Superconducting Transmons</strong>, <strong>Trapped Ions (IonQ Aria-1)</strong> and <strong>Stabilizer QEC Decoders</strong> in real time. This application will have new features and a proper documentation added soon. I am still studing how Silicon emitters work, so that section is under construction.
 </p>
 
 <div class="quty-container">
