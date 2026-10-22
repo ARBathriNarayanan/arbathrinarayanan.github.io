@@ -9,9 +9,9 @@ description: Interactive Multi-Platform Quantum Hardware, Quantum Circuit & QEC 
 
 <style>
 .quty-container {
-  width: calc(100% + 16rem);
+  width: calc(100% + 32rem);
   max-width: none;
-  margin-left: -8rem;
+  margin-left: -16rem;
   height: 92vh;
   height: 92dvh;
   min-height: 680px;
