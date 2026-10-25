@@ -37,6 +37,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/repositories/";
           },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "CV can be found in this page. It can also be downloaded by clicking the icon to the side.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
         },{id: "dropdown-bookshelf",
               title: "bookshelf",
               description: "",
@@ -44,15 +51,15 @@ ninja.data = [{
               handler: () => {
                 window.location.href = "/books/";
               },
-            },{id: "post-page-not-found-404-gumroad",
+            },{id: "post-issue-06-heirlooms",
         
-          title: 'Page not found (404) - Gumroad <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+          title: 'Issue 06: Heirlooms <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
         
-        description: "Gumroad is a powerful, but simple, e-commerce platform. We make it easy to earn your first dollar online by selling digital products, memberships and more.",
+        description: "​What do we inherit? What do we refuse? The spice box in your kitchen cabinet, a lullaby in your mother tongue, old foxing letters from an address you can...",
         section: "Posts",
         handler: () => {
           
-            window.open("https://zhagaramlit.gumroad.com/l/issue06?utm_source=ig&utm_medium=social&utm_content=link_in_bio&utm_id=97760_v0_s00_e0_tv3", "_blank");
+            window.open("https://zhagaram.gumroad.com/l/issue06", "_blank");
           
         },
       },{id: "post-the-gopuram",
