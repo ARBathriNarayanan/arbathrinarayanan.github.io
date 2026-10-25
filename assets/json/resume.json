@@ -1,19 +1,19 @@
 {
   "basics": {
-    "name": "Albert Einstein",
-    "label": "Scientist",
+    "name": "A R Bathri Narayanan",
+    "label": "Student",
     "image": "",
-    "email": "albert@einstein.de",
-    "phone": "(912) 123-4567",
-    "url": "https://alshedivat.github.io/al-folio/",
-    "summary": "A German-born theoretical physicist, widely ranked among the greatest and most influential scientists of all time",
-    "location": {
-      "address": "2712 Broadway St",
-      "postalCode": "CA 94115",
-      "city": "San Francisco",
-      "countryCode": "US",
-      "region": "California"
-    },
+    "email": "badrichennai2@gmail.com",
+    //"phone": "(912) 123-4567",
+    "url": "https://arbathrinarayanan.github.io/",
+    "summary": "An Indian student working on quantum information, computing and quantum devices, and undergone training in India's premier institutes like IISc, TIFR etc.",
+    //"location": {
+    //  "address": "2712 Broadway St",
+    //  "postalCode": "CA 94115",
+    //  "city": "San Francisco",
+    //  "countryCode": "US",
+    //  "region": "California"
+   // },
     "profiles": [
       {
         "network": "Twitter",
@@ -24,13 +24,22 @@
   },
   "work": [
     {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
-      "highlights": ["Relativity"]
+      "name": "Chennai Mathematical Institute",
+      "position": "Intern",
+      "url": "https://www.cmi.ac.in/",
+      "startDate": "2026-06",
+      "endDate": "2026-10",
+      "summary": "Working on Hartman effect on entangled systems and motion of a double pendulum experimentally.",
+      "highlights": ["Non-linear dynamics, quantum mechanics"]
+    }
+    {
+      "name": "UM DAE Centre for Excellence in Basic Sciences",
+      "position": "10th Semester Project",
+      "url": "https://www.cmi.ac.in/",
+      "startDate": "2026-01",
+      "endDate": "2026-05",
+      "summary": "Applied classical and quantum machine learning techniques to extract the Sivers function from Semi-Inclusive Deep Inelastic Scattering (SIDIS) data.",
+      "highlights": ["Machine learning, particle physics"]
     }
   ],
   "volunteer": [

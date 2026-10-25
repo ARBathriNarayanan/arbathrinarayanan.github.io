@@ -11,29 +11,27 @@
 - title: Education
   type: time_table
   contents:
-    - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
+    - title: Integrated Masters of Science, Physics
+      institution: UM DAE Centre for Excellence in Basic Sciences, Mumbai
+      year: 2021-2026
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
+        - CGPA- 8.25/10
+        - Worked on projects pertaining to quantum computing and information
+        - Served as coordinator of Dance club, Alumni cell.
+        - Was a member of Art club, Science club, Literature club, cebs_lifestyle instagram.
+    - title: CBSE Class 12
+      institution: DAV School, Adambakkam
+      year: 2007-2021
       description:
-        - Description 1.
-        - Description 2.
+        - Best student award 2016
+        - Won various awards in quizzing
 
 - title: Experience
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+    - title: Intern
+      institution: Chennai Mathematical Institute, Chennai
+      year: 2026
       description:
         - Description 1.
         - Description 2.
@@ -41,40 +39,45 @@
           contents:
             - Sub-description 1.
             - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
+
+    - title: 10th Semester Project
+      institution: UM DAE Centre for Excellence in Basic Sciences, Mumbai
+      year: 2026
       description:
         - Description 1.
         - Description 2.
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
+    - title: 9th Semester Project
+      institution: Indian Institute of Science
+      year: 2025
 
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
+    - title: 4th Year Projects
+      institution: UM DAE Centre for Excellence in Basic Sciences, Mumbai
+      year: 2024-2025
       description:
 
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
+    - title: Summer Project
+      institution: The Institute of Mathematical Sciences, Chennai
+      year: 2024
+
+    - title: Summer Project (Indian Academies of Sciences)
+      institution: Harish-Chandra Research Institute, Prayagraj
+      year: 2023
 
 - title: Open Source Projects
   type: time_table
   contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
+    - title: <a href="https://arbathrinarayanan.github.io/quty/">QuTY</a>
+      year: 2026-now
+      description: An all in one console containing elements of quantum hardware, quantum algorithms and quantum error correction
 
 - title: Honors and Awards
   type: time_table
   contents:
-    - year: 1921
+    - year: 2026
       items:
-        - Nobel Prize in Physics
-        - Matteucci Medal
+        - Second prize in project expo conducted by Project-Q, Vijayawada
+        - 
     - year: 2029
       items:
         - Max Planck Medal

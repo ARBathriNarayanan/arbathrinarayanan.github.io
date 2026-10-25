@@ -127,7 +127,7 @@ external_sources:
 #    rss_url: https://medium.com/@al-folio/feed
   - name: "Zhagaram Literary Magazine: Issue 06"
     posts:
-      - url: https://zhagaramlit.gumroad.com/l/issue06?utm_source=ig&utm_medium=social&utm_content=link_in_bio&utm_id=97760_v0_s00_e0_tv3
+      - url: https://zhagaram.gumroad.com/l/issue06
         published_date: 2026-09-09
 
 # -----------------------------------------------------------------------------
@@ -201,7 +201,7 @@ exclude:
   - _pages/profiles.md
   - _pages/teaching.md
   - assets/jupyter/blog.ipynb
-  - _pages/cv.md
+  #- _pages/cv.md
   - _pages/nuclear-app.md
 keep_files:
   - CNAME
