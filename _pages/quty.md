@@ -54,3 +54,7 @@ description: Interactive Multi-Platform Quantum Hardware, Quantum Circuit & QEC 
   </iframe>
 </div>
 
+<p>
+I acknowledge the support of Vishal Sai Vetrivel in learning Rust and engaging in discussions. I also acknowledge the role of Project-Q for the inspiration, idea and motivation behind this tool.
+</p>
+
